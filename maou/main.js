@@ -83,7 +83,7 @@ function renderMap() {
       const tile = tilemap[x][y];
       const dist = Math.abs(playerPos.x - x) + Math.abs(playerPos.y - y);
       const div = document.createElement("div");
-      div.classList.add("tile");
+      div.className = "tile"; // Reset classes
 
       if (dist <= VIEW_RADIUS) {
         tile.explored = true;
@@ -123,16 +123,28 @@ function applyTileStyle(div, tile) {
       div.classList.add("enemy");
       break;
     case TILE_RESOURCE_WOOD:
-      div.textContent = "🪵";
-      div.classList.add("resource-wood");
+      if (tile.resourceAmount > 0) {
+        div.textContent = "🪵";
+        div.classList.add("resource-wood");
+      } else {
+        div.textContent = "";
+      }
       break;
     case TILE_RESOURCE_STONE:
-      div.textContent = "🪨";
-      div.classList.add("resource-stone");
+      if (tile.resourceAmount > 0) {
+        div.textContent = "🪨";
+        div.classList.add("resource-stone");
+      } else {
+        div.textContent = "";
+      }
       break;
     case TILE_RESOURCE_FOOD:
-      div.textContent = "🍖";
-      div.classList.add("resource-food");
+      if (tile.resourceAmount > 0) {
+        div.textContent = "🍖";
+        div.classList.add("resource-food");
+      } else {
+        div.textContent = "";
+      }
       break;
   }
 }

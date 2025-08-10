@@ -1,5 +1,103 @@
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5005604326231695"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Portal</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #74ABE2, #5563DE);
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        header {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .game-list {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .game-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 15px;
+            width: 200px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+        .game-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .game-card i {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        .game-card a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.1em;
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5005604326231695"
      crossorigin="anonymous"></script>
+    <header>
+        🎮 Welcome to Our Game Collection
+    </header>
+    <p>Please enjoy the games. More exciting titles are coming soon!</p>
+     
+    <div class="game-list">
+        <!-- Flappy Bird -->
+        <div class="game-card">
+            <i class="fa-solid fa-dove"></i>
+            <span>Flappy Bird</span>
+            <a href="./flappy-bird">Play Now</a>
+        </div>
 
-<div>Please enjoy the game, and more are coming...</div>
-<a href="./flappy-bird">flappy bird</a>
+        <!-- Placeholder for future game -->
+        <div class="game-card">
+            <i class="fa-solid fa-question"></i>
+            <span>Coming Soon</span>
+            <a href="#">Stay Tuned</a>
+        </div>
+
+        <!-- Another placeholder -->
+        <div class="game-card">
+            <i class="fa-solid fa-gamepad"></i>
+            <span>Future Game</span>
+            <a href="#">Stay Tuned</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Game Portal. All rights reserved.
+    </footer>
+</body>
+</html>

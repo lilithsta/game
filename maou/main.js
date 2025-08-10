@@ -88,7 +88,32 @@ function renderMap() {
       if (dist <= VIEW_RADIUS) {
         tile.explored = true;
         applyTileStyle(div, tile);
-        div.onclick = () => onTileClick(x, y);
+
+        if (x === playerPos.x && y === playerPos.y) {
+          div.textContent = "🧙‍♂️";
+          div.style.fontSize = "24px";
+          div.style.cursor = "default";
+          div.onclick = null;
+        } else if (
+          dist === 1 &&
+          (tile.type === TILE_EMPTY ||
+            tile.type === TILE_RESOURCE_WOOD ||
+            tile.type === TILE_RESOURCE_STONE ||
+            tile.type === TILE_RESOURCE_FOOD)
+        ) {
+          // Adjacent tile - clicking moves player
+          div.style.cursor = "pointer";
+          div.title = "Click to move here";
+          div.onclick = () => {
+            playerPos.x = x;
+            playerPos.y = y;
+            renderMap();
+          };
+        } else {
+          // Other tiles in view - normal interaction (resource/battle)
+          div.style.cursor = "pointer";
+          div.onclick = () => onTileClick(x, y);
+        }
       } else {
         if (tile.explored) {
           applyTileStyle(div, tile);
@@ -97,11 +122,6 @@ function renderMap() {
           div.classList.add("fog");
         }
         div.onclick = null;
-      }
-
-      if (x === playerPos.x && y === playerPos.y) {
-        div.textContent = "🧙‍♂️";
-        div.style.fontSize = "24px";
       }
 
       mapEl.appendChild(div);
@@ -161,6 +181,20 @@ function onTileClick(x, y) {
     alert("This is your position.");
     return;
   }
+  if (
+    dist === 1 &&
+    (tile.type === TILE_EMPTY ||
+      tile.type === TILE_RESOURCE_WOOD ||
+      tile.type === TILE_RESOURCE_STONE ||
+      tile.type === TILE_RESOURCE_FOOD)
+  ) {
+    // Adjacent empty/resource tile click moves player instead of interaction
+    playerPos.x = x;
+    playerPos.y = y;
+    renderMap();
+    return;
+  }
+
   switch (tile.type) {
     case TILE_RESOURCE_WOOD:
     case TILE_RESOURCE_STONE:

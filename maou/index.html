@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Troja - Demon Invasion</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Troja - Demon Invasion</h1>
+  <div id="map"></div>
+
+  <div id="info-panel">
+    <p>Resources: Wood <span id="wood">0</span> | Stone <span id="stone">0</span> | Food <span id="food">0</span></p>
+    <p>Heroes: <span id="heroes">0</span> | Castle Level: <span id="castleLevel">1</span></p>
+
+    <button id="trainHeroBtn">Train Hero (Cost: 10 Food)</button>
+    <button id="upgradeCastleBtn">Upgrade Castle (Cost: 50 Wood, 30 Stone)</button>
+
+    <div id="movement-buttons">
+      <button id="moveUpBtn">⬆️ Move Up</button>
+      <button id="moveLeftBtn">⬅️ Move Left</button>
+      <button id="moveDownBtn">⬇️ Move Down</button>
+      <button id="moveRightBtn">➡️ Move Right</button>
+    </div>
+
+    <button id="saveBtn">Save Game</button>
+    <button id="loadBtn">Load Game</button>
+    <button id="resetBtn">Reset Game</button>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

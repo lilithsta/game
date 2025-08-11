@@ -1,0 +1,68 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #fafafa;
+  color: #333;
+  user-select: none;
+}
+
+#map {
+  display: grid;
+  grid-template-columns: repeat(15, 36px);
+  grid-template-rows: repeat(15, 36px);
+  gap: 2px;
+  margin: 15px 0;
+}
+
+.tile {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  background-color: #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tile.fog {
+  background-color: #444;
+  color: #444;
+  cursor: default;
+}
+
+.tile.castle {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.tile.enemy {
+  background-color: #f44336;
+  color: white;
+}
+
+.tile.resource-wood {
+  background-color: #8B4513;
+  color: white;
+}
+
+.tile.resource-stone {
+  background-color: #708090;
+  color: white;
+}
+
+.tile.resource-food {
+  background-color: #FFA500;
+  color: white;
+}
+
+#info-panel button {
+  margin: 5px 8px 5px 0;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+#movement-buttons {
+  margin: 10px 0;
+}

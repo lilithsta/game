@@ -1,6 +1,35 @@
 let langData = {};
 let currentLang = "en";
 
+document.addEventListener("DOMContentLoaded", () => {
+    const startBtn = document.getElementById("startGameBtn");
+    const retryBtn = document.getElementById("retryBtn");
+    const welcomeScreen = document.getElementById("welcomeScreen");
+    const gameContainer = document.getElementById("gameContainer");
+    const languageSelect = document.getElementById("languageSelect");
+
+    // Handle Start Game
+    startBtn.addEventListener("click", () => {
+        welcomeScreen.style.display = "none";
+        gameContainer.style.display = "block";
+        currentLang = languageSelect.value; // set chosen language
+        loadLanguage(currentLang).then(() => {
+            initGame();
+        });
+    });
+
+    // Handle Retry
+    retryBtn.addEventListener("click", () => {
+        retryBtn.style.display = "none";
+        initGame();
+    });
+
+    // Change language on dropdown change
+    languageSelect.addEventListener("change", () => {
+        currentLang = languageSelect.value;
+    });
+});
+
 async function loadLanguage(lang = "en") {
   const res = await fetch("lang.json");
   langData = await res.json();

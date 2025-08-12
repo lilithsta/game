@@ -1,131 +1,107 @@
-// Enemies data
-const enemies = {
-  guard: {
-    name: "Dungeon Guard 🛡️",
-    health: 50,
-    attackMin: 5,
-    attackMax: 12,
-  }
-};
-
-// Combat state variables
+// Flag to know if currently in combat
 let inCombat = false;
-let currentEnemy = null;
-let combatTurn = 'player'; // 'player' or 'enemy'
-let defendedLastTurn = false;
 
-function startCombat(enemyKey) {
+let combatPlayer;
+let combatEnemy;
+
+function startCombat(player, enemy) {
   inCombat = true;
-  currentEnemy = { ...enemies[enemyKey] }; // clone enemy stats
-  combatTurn = 'player';
-  defendedLastTurn = false;
-  storyExtra = '';
-  renderCombatScene(`⚔️ You encounter ${currentEnemy.name}! Prepare to fight!`);
+  combatPlayer = { ...player }; // shallow copy to keep combat separate
+  combatEnemy = { ...enemy };
+
+  renderCombatScene();
 }
 
-function renderCombatScene(extraText = '') {
-  displayStats();
-  displayInventory();
+function renderCombatScene() {
+  const storyEl = document.getElementById("sceneText");
+  const choicesEl = document.getElementById("choices");
 
-  const storyText = `🗡️ Combat with ${currentEnemy.name}\n\n` +
-                    `Your Health: ${player.health}\n` +
-                    `${currentEnemy.name} Health: ${currentEnemy.health}\n\n` +
-                    extraText;
-
-  storyEl.textContent = storyText;
-
-  choicesEl.innerHTML = '';
-
-  if (!inCombat) return;
-
-  if (combatTurn === 'player') {
-    // Player's turn: Attack, Defend, Run
-    const attackBtn = document.createElement('button');
-    attackBtn.textContent = "🗡️ Attack";
-    attackBtn.onclick = () => playerAttack();
-
-    const defendBtn = document.createElement('button');
-    defendBtn.textContent = "🛡️ Defend";
-    defendBtn.onclick = () => playerDefend();
-
-    const runBtn = document.createElement('button');
-    runBtn.textContent = "🏃‍♂️ Run";
-    runBtn.onclick = () => playerRun();
-
-    choicesEl.appendChild(attackBtn);
-    choicesEl.appendChild(defendBtn);
-    choicesEl.appendChild(runBtn);
-  } else {
-    // Enemy turn auto-resolve with delay
-    choicesEl.textContent = "⌛ Enemy is attacking...";
-    setTimeout(enemyAttack, 1500);
-  }
-}
-
-function playerAttack() {
-  let damage = Math.floor(player.strength * (0.6 + Math.random() * 0.8)); // 60%-140%
-  currentEnemy.health -= damage;
-
-  storyExtra = `You attack and deal ${damage} damage!`;
-
-  if (currentEnemy.health <= 0) {
-    inCombat = false;
-    storyExtra += `\n🎉 You defeated ${currentEnemy.name}!`;
-    player.inventory.push("Gold Coin");
-    storyExtra += "\n💰 You found a Gold Coin!";
-    currentScene = "corridor"; // Back to corridor or any safe place
-    renderScene();
+  if (!storyEl || !choicesEl) {
+    console.error("Combat UI elements missing.");
     return;
   }
 
-  combatTurn = 'enemy';
-  defendedLastTurn = false;
-  renderCombatScene(storyExtra);
-}
+  // Show combat status
+  storyEl.textContent =
+    `⚔️ Combat! You: HP ${combatPlayer.hp}, ATK ${combatPlayer.attack}, DEF ${combatPlayer.defense}\n` +
+    `Enemy: HP ${combatEnemy.hp}, ATK ${combatEnemy.attack}, DEF ${combatEnemy.defense}`;
 
-function playerDefend() {
-  storyExtra = "You brace yourself to reduce incoming damage next turn.";
-  defendedLastTurn = true;
-  combatTurn = 'enemy';
-  renderCombatScene(storyExtra);
-}
+  choicesEl.innerHTML = "";
 
-function playerRun() {
-  if (Math.random() < 0.5) {
+  // Attack button
+  const attackBtn = document.createElement("button");
+  attackBtn.textContent = "🗡️ Attack";
+  attackBtn.onclick = () => {
+    // Player attacks enemy
+    const damageToEnemy = Math.max(0, combatPlayer.attack - combatEnemy.defense);
+    combatEnemy.hp -= damageToEnemy;
+
+    // Enemy alive? Enemy attacks back
+    let damageToPlayer = 0;
+    if (combatEnemy.hp > 0) {
+      damageToPlayer = Math.max(0, combatEnemy.attack - combatPlayer.defense);
+      combatPlayer.hp -= damageToPlayer;
+    }
+
+    // Update main player stats if player survived
+    if (combatPlayer.hp > 0) {
+      // Update the real player object (assuming combatPlayer is a copy)
+      window.player.hp = combatPlayer.hp;
+      window.player.attack = combatPlayer.attack;
+      window.player.defense = combatPlayer.defense;
+    }
+
+    // Show combat log message
+    storyEl.textContent =
+      `🗡️ You dealt ${damageToEnemy} damage.\n` +
+      (combatEnemy.hp > 0
+        ? `💥 Enemy dealt ${damageToPlayer} damage back.\nEnemy HP left: ${combatEnemy.hp}`
+        : "💀 Enemy defeated!");
+
+    window.displayStats();
+
+    // Check end of combat
+    if (combatPlayer.hp <= 0) {
+      inCombat = false;
+      storyEl.textContent += `\n☠️ You died in combat. Game over.`;
+      choicesEl.innerHTML = "";
+      const retryBtn = document.getElementById("retryBtn");
+      if (retryBtn) retryBtn.style.display = "inline-block";
+      return;
+    }
+
+    if (combatEnemy.hp <= 0) {
+      inCombat = false;
+      // Continue normal gameplay after combat ends
+      choicesEl.innerHTML = "";
+      const continueBtn = document.createElement("button");
+      continueBtn.textContent = "➡️ Continue";
+      continueBtn.onclick = () => {
+        // After combat ends, re-render normal scene
+        window.renderScene();
+      };
+      choicesEl.appendChild(continueBtn);
+      return;
+    }
+
+    // Still fighting, update UI for next player action
+    renderCombatScene();
+  };
+  choicesEl.appendChild(attackBtn);
+
+  // Optionally add a "Run" button
+  const runBtn = document.createElement("button");
+  runBtn.textContent = "🏃‍♂️ Run";
+  runBtn.onclick = () => {
     inCombat = false;
-    storyExtra = "You successfully escaped!";
-    currentScene = "corridor"; // Safe fallback
-    renderScene();
-  } else {
-    storyExtra = "Failed to escape!";
-    combatTurn = 'enemy';
-    renderCombatScene(storyExtra);
-  }
-}
-
-function enemyAttack() {
-  if (!inCombat) return;
-
-  let enemyAttackPower = Math.floor(currentEnemy.attackMin + Math.random() * (currentEnemy.attackMax - currentEnemy.attackMin));
-
-  let damage = enemyAttackPower;
-  if (defendedLastTurn) {
-    damage = Math.floor(damage / 2);
-  }
-
-  player.health -= damage;
-
-  storyExtra = `${currentEnemy.name} attacks and deals ${damage} damage!`;
-
-  if (player.health <= 0) {
-    inCombat = false;
-    storyExtra += "\n💀 You died in combat...";
-    currentScene = "gameOver";
-    renderScene();
-    return;
-  }
-
-  combatTurn = 'player';
-  defendedLastTurn = false;
-  renderCombatScene(storyExtra);
+    storyEl.textContent = "🏃‍♂️ You fled from the combat!";
+    choicesEl.innerHTML = "";
+    const continueBtn = document.createElement("button");
+    continueBtn.textContent = "➡️ Continue";
+    continueBtn.onclick = () => {
+      window.renderScene();
+    };
+    choicesEl.appendChild(continueBtn);
+  };
+  choicesEl.appendChild(runBtn);
 }

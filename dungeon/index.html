@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🗡️ Text Dungeon Game with Inventory & Stats</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Dungeon Game</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen">
+        <h1 id="welcomeTitle">Text Dungeon</h1>
+        <label for="languageSelect" id="langLabel">Language:</label>
+        <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="jp">日本語</option>
+        </select>
+        <br><br>
+        <button id="startGameBtn">Start Game</button>
+    </div>
 
-  <div id="stats"></div>
-  <div id="inventory"></div>
-  <div id="story">🕯️ Welcome to the Dungeon!</div>
-  <div id="choices"></div>
+    <!-- Game Container -->
+    <div id="gameContainer" style="display:none;">
+        <div id="stats">
+            <p id="playerStats"></p>
+        </div>
+        <div id="inventory">
+            <p id="playerInventory"></p>
+        </div>
+        <div id="gameText"></div>
+        <div id="choices"></div>
+        <button id="retryBtn" style="display:none;">Retry</button>
+    </div>
 
-  <script src="combat.js"></script>
-  <script src="game.js"></script>
-
+    <script src="combat.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>

@@ -92,9 +92,8 @@ function renderScene() {
     return;
   }
 
-  // Handle scene onEnter logic if needed
-  if (scene.key === "rest" && scene.heal) {
-    // Example: heal text template
+  // 恢复血量示例，用 currentScene 判断
+  if (currentScene === "rest" && scene.heal) {
     const healed = Math.min(20, 100 - player.health);
     player.health += healed;
     storyExtra = scene.heal.replace("{healed}", healed).replace("{health}", player.health);
@@ -108,13 +107,20 @@ function renderScene() {
   displayInventory();
 
   choicesEl.innerHTML = "";
+
+  // 确保choices是对象数组，否则报错
+  if (!Array.isArray(scene.choices)) {
+    choicesEl.textContent = "No choices available.";
+    return;
+  }
+
   scene.choices.forEach((choice) => {
     const btn = document.createElement("button");
     btn.textContent = choice.text;
     btn.onclick = () => {
       currentScene = choice.next;
 
-      // After scene change, trigger one random event max
+      // 随机事件
       let eventText = null;
       for (const event of randomEvents) {
         eventText = event();
@@ -123,7 +129,6 @@ function renderScene() {
       if (eventText) storyExtra = eventText;
       else storyExtra = "";
 
-      // Check player health for game over
       if (player.health <= 0) {
         currentScene = "gameOver";
       }

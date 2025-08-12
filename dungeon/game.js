@@ -8,7 +8,7 @@ let player = {
 let currentScene = "start";
 let storyExtra = "";
 
-const storyEl = document.getElementById("story");
+const storyEl = document.getElementById("sceneText");
 const choicesEl = document.getElementById("choices");
 const statsEl = document.getElementById("stats");
 const inventoryEl = document.getElementById("inventory");

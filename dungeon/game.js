@@ -2,7 +2,9 @@ let currentLang = "en";
 let langData = {};
 let player = { hp: 20, attack: 5, defense: 2, inventory: [] };
 let currentScene = 0;
+let inCombat = false;
 
+// Load language data from JSON
 async function loadLanguage(lang) {
     try {
         const response = await fetch("lang.json");
@@ -13,19 +15,40 @@ async function loadLanguage(lang) {
     }
 }
 
+// Translate helper
 function t(key) {
     return langData[currentLang] && langData[currentLang][key] ? langData[currentLang][key] : key;
 }
 
-function updateStats() {
+// Update player stats display
+function displayStats() {
     const statsElem = document.getElementById("playerStats");
     if (statsElem) {
         statsElem.textContent =
             `${t("hp")}: ${player.hp} | ${t("attack")}: ${player.attack} | ${t("defense")}: ${player.defense}`;
     }
+
+    // Update inventory display
+    const invElem = document.getElementById("playerInventory");
+    if (invElem) {
+        if (player.inventory.length === 0) {
+            invElem.textContent = "🎒 " + t("inventoryEmpty");
+        } else {
+            invElem.textContent = "🎒 " + t("inventory") + ": " + player.inventory.join(", ");
+        }
+    }
 }
 
+// Render the current scene and choices
 function renderScene() {
+    if (inCombat) {
+        // Combat is handled separately
+        if (window.renderCombatScene) {
+            window.renderCombatScene();
+        }
+        return;
+    }
+
     const sceneTextElem = document.getElementById("sceneText");
     const choicesElem = document.getElementById("choices");
 
@@ -38,30 +61,47 @@ function renderScene() {
     sceneTextElem.textContent = sceneText;
     choicesElem.innerHTML = "";
 
-    // Random events
+    // Define possible random events
     const events = [
-        { text: t("findPotion"), action: () => { player.hp += 5; updateStats(); } },
-        { text: t("findSword"), action: () => { player.attack += 2; updateStats(); } },
-        { text: t("findShield"), action: () => { player.defense += 1; updateStats(); } },
-        { text: t("monsterAppears"), action: () => { startCombat(player, { hp: 8, attack: 3, defense: 1 }); } }
+        { text: t("findPotion"), action: () => { player.hp = Math.min(player.hp + 5, 100); updateStatsAndInventory(); } },
+        { text: t("findSword"), action: () => { player.attack += 2; player.inventory.push("Sword"); updateStatsAndInventory(); } },
+        { text: t("findShield"), action: () => { player.defense += 1; player.inventory.push("Shield"); updateStatsAndInventory(); } },
+        { text: t("monsterAppears"), action: () => { 
+            if (window.startCombat) {
+                inCombat = true;
+                window.startCombat(player, { hp: 8, attack: 3, defense: 1 }); 
+            } else {
+                alert("Combat system not loaded.");
+            }
+        } }
     ];
 
-    const selectedEvents = [];
-    for (let i = 0; i < 3; i++) {
-        selectedEvents.push(events[Math.floor(Math.random() * events.length)]);
+    // Randomly pick 3 unique events to present as choices
+    let selectedEvents = [];
+    while (selectedEvents.length < 3) {
+        const candidate = events[Math.floor(Math.random() * events.length)];
+        if (!selectedEvents.includes(candidate)) selectedEvents.push(candidate);
     }
 
+    // Create buttons for choices
     selectedEvents.forEach(event => {
         const btn = document.createElement("button");
         btn.textContent = event.text;
-        btn.addEventListener("click", () => {
+        btn.onclick = () => {
             event.action();
-            nextScene();
-        });
+            if (!inCombat) {
+                nextScene();
+            }
+        };
         choicesElem.appendChild(btn);
     });
 }
 
+function updateStatsAndInventory() {
+    displayStats();
+}
+
+// Advance to the next scene
 function nextScene() {
     currentScene++;
     if (player.hp <= 0) {
@@ -71,7 +111,9 @@ function nextScene() {
     }
 }
 
+// Show game over and display retry button
 function gameOver() {
+    inCombat = false;
     const sceneTextElem = document.getElementById("sceneText");
     const choicesElem = document.getElementById("choices");
     const retryBtn = document.getElementById("retryBtn");
@@ -81,13 +123,20 @@ function gameOver() {
     if (retryBtn) retryBtn.style.display = "inline-block";
 }
 
+// Initialize game state
 function initGame() {
     player = { hp: 20, attack: 5, defense: 2, inventory: [] };
     currentScene = 0;
-    updateStats();
+    inCombat = false;
+    updateStatsAndInventory();
     renderScene();
 }
 
+// Expose needed functions globally for combat.js
+window.displayStats = displayStats;
+window.renderScene = renderScene;
+
+// Setup event listeners after DOM loads
 document.addEventListener("DOMContentLoaded", () => {
     const startBtn = document.getElementById("startGameBtn");
     const retryBtn = document.getElementById("retryBtn");
@@ -114,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (languageSelect) {
         languageSelect.addEventListener("change", async () => {
             await loadLanguage(languageSelect.value);
-            updateStats();
+            displayStats();
             renderScene();
         });
     }

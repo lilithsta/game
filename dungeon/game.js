@@ -101,7 +101,7 @@ function renderScene() {
 
   let sceneText = scene.text || "";
   if (storyExtra) sceneText += "\n" + storyExtra;
-
+  console.log("======================", scene);
   storyEl.textContent = sceneText;
   displayStats();
   displayInventory();

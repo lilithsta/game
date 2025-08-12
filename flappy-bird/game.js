@@ -8,13 +8,25 @@ let score = 0;
 let gameOver = false;
 let frameCount = 0;
 
-// 画面基准宽高比例，用于缩放
+// 基准画布尺寸比例
 const BASE_WIDTH = 400;
 const BASE_HEIGHT = 600;
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+  const baseRatio = BASE_WIDTH / BASE_HEIGHT; // 0.6667
+  const windowRatio = windowWidth / windowHeight;
+
+  if (windowRatio < baseRatio) {
+    // 窄屏（手机），按宽度撑满，高度自适应
+    canvas.width = windowWidth;
+    canvas.height = windowWidth / baseRatio;
+  } else {
+    // 宽屏（PC），按高度撑满，宽度自适应
+    canvas.height = windowHeight;
+    canvas.width = windowHeight * baseRatio;
+  }
 
   bird = {
     x: canvas.width * 0.125,
@@ -126,20 +138,20 @@ function jump() {
   }
 }
 
-// 键盘跳跃（空格或↑）
+// 键盘跳跃（空格和上箭头）
 document.addEventListener('keydown', e => {
   if (e.code === 'Space' || e.code === 'ArrowUp') {
     jump();
   }
 });
 
-// 触屏跳跃，防止页面滚动
+// 触摸屏跳跃（手机）
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
   jump();
 }, { passive: false });
 
-// 鼠标点击跳跃（PC用）
+// 鼠标点击跳跃（PC）
 canvas.addEventListener('mousedown', e => {
   jump();
 });

@@ -1,0 +1,38 @@
+body {
+  font-family: monospace, monospace;
+  background-color: #111;
+  color: #eee;
+  padding: 20px;
+  max-width: 700px;
+  margin: auto;
+}
+
+#story {
+  white-space: pre-wrap;
+  margin-bottom: 20px;
+  min-height: 140px;
+  border: 1px solid #555;
+  padding: 10px;
+  background: #222;
+}
+
+#stats, #inventory {
+  margin-bottom: 15px;
+  padding: 8px;
+  border: 1px solid #444;
+  background: #222;
+}
+
+button {
+  background-color: #444;
+  color: #eee;
+  border: none;
+  padding: 10px 15px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #666;
+}

@@ -21,6 +21,12 @@ function displayInventory() {
   }
 }
 
+let currentScene = 'start';
+let storyExtra = '';
+
+const storyEl = document.getElementById('story');
+const choicesEl = document.getElementById('choices');
+
 // Scenes with more selections and emojis
 const scenes = {
   start: {
@@ -97,22 +103,11 @@ const scenes = {
       { text: "🗣️ Try to reason", next: "reason" }
     ]
   },
+  // This fight scene now triggers combat from combat.js
   fight: {
-    text: `⚔️ You fight bravely but...`,
-    onEnter: () => {
-      let outcome = Math.random() * player.strength;
-      if (outcome > 7) {
-        player.health -= 10;
-        storyExtra = "\n🩸 You wounded the guard and escaped but lost 10 health.";
-        currentScene = "corridor";
-      } else {
-        player.health -= 40;
-        storyExtra = "\n💥 The guard overpowered you! You lost 40 health and are captured again.";
-        currentScene = "start";
-      }
-    },
+    text: `⚔️ You prepare to fight the dungeon guard!`,
     choices: [
-      { text: "➡️ Continue", next: () => currentScene }
+      { text: "Start Fight", next: () => { startCombat('guard'); return currentScene; } }
     ]
   },
   reason: {
@@ -226,13 +221,14 @@ const randomEvents = [
   }
 ];
 
-let currentScene = 'start';
-let storyExtra = '';
-
-const storyEl = document.getElementById('story');
-const choicesEl = document.getElementById('choices');
-
+// Main render scene function
 function renderScene() {
+  if (inCombat) {
+    // Combat rendering is handled in combat.js
+    renderCombatScene();
+    return;
+  }
+
   storyExtra = '';
   let scene = scenes[currentScene];
 
@@ -255,7 +251,7 @@ function renderScene() {
         currentScene = choice.next;
       }
 
-      // Random event triggered once per move max
+      // Random event triggered max once per move
       let eventText = null;
       for (const event of randomEvents) {
         eventText = event();

@@ -1,38 +1,73 @@
+/* Base */
 body {
   font-family: monospace, monospace;
   background-color: #111;
   color: #eee;
-  padding: 20px;
-  max-width: 700px;
+  padding: 15px;
+  max-width: 600px;
   margin: auto;
+  box-sizing: border-box;
+  line-height: 1.4;
 }
 
+/* Story box */
 #story {
   white-space: pre-wrap;
   margin-bottom: 20px;
-  min-height: 140px;
+  min-height: 160px;
   border: 1px solid #555;
-  padding: 10px;
+  padding: 15px;
   background: #222;
+  border-radius: 8px;
+  font-size: 1.1rem;
 }
 
+/* Stats and Inventory */
 #stats, #inventory {
-  margin-bottom: 15px;
-  padding: 8px;
+  margin-bottom: 12px;
+  padding: 10px;
   border: 1px solid #444;
   background: #222;
+  border-radius: 6px;
+  font-size: 1rem;
 }
 
+/* Buttons container */
+#choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* Buttons */
 button {
+  flex: 1 1 45%;
+  max-width: 48%;
   background-color: #444;
   color: #eee;
   border: none;
-  padding: 10px 15px;
-  margin: 5px;
+  padding: 14px 20px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  text-align: center;
 }
 
-button:hover {
+button:hover,
+button:focus {
   background-color: #666;
+  outline: none;
+}
+
+/* Mobile smaller screens */
+@media (max-width: 400px) {
+  button {
+    flex-basis: 100%;
+    max-width: 100%;
+    padding: 16px 0;
+    font-size: 1.3rem;
+  }
 }

@@ -18,8 +18,11 @@ function t(key) {
 }
 
 function updateStats() {
-    document.getElementById("playerStats").textContent =
-        `${t("hp")}: ${player.hp} | ${t("attack")}: ${player.attack} | ${t("defense")}: ${player.defense}`;
+    const statsElem = document.getElementById("playerStats");
+    if (statsElem) {
+        statsElem.textContent =
+            `${t("hp")}: ${player.hp} | ${t("attack")}: ${player.attack} | ${t("defense")}: ${player.defense}`;
+    }
 }
 
 function renderScene() {
@@ -69,9 +72,13 @@ function nextScene() {
 }
 
 function gameOver() {
-    document.getElementById("sceneText").textContent = t("gameOver");
-    document.getElementById("choices").innerHTML = "";
-    document.getElementById("retryBtn").style.display = "inline-block";
+    const sceneTextElem = document.getElementById("sceneText");
+    const choicesElem = document.getElementById("choices");
+    const retryBtn = document.getElementById("retryBtn");
+
+    if (sceneTextElem) sceneTextElem.textContent = t("gameOver");
+    if (choicesElem) choicesElem.innerHTML = "";
+    if (retryBtn) retryBtn.style.display = "inline-block";
 }
 
 function initGame() {
@@ -88,19 +95,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameContainer = document.getElementById("gameContainer");
     const languageSelect = document.getElementById("languageSelect");
 
-    startBtn.addEventListener("click", async () => {
-        await loadLanguage(languageSelect.value);
-        welcomeScreen.style.display = "none";
-        gameContainer.style.display = "block";
-        initGame();
-    });
+    if (startBtn) {
+        startBtn.addEventListener("click", async () => {
+            await loadLanguage(languageSelect.value);
+            welcomeScreen.style.display = "none";
+            gameContainer.style.display = "block";
+            initGame();
+        });
+    }
 
-    retryBtn.addEventListener("click", () => {
-        retryBtn.style.display = "none";
-        initGame();
-    });
+    if (retryBtn) {
+        retryBtn.addEventListener("click", () => {
+            retryBtn.style.display = "none";
+            initGame();
+        });
+    }
 
-    languageSelect.addEventListener("change", async () => {
-        await loadLanguage(languageSelect.value);
-    });
+    if (languageSelect) {
+        languageSelect.addEventListener("change", async () => {
+            await loadLanguage(languageSelect.value);
+            updateStats();
+            renderScene();
+        });
+    }
 });

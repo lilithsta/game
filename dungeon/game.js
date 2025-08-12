@@ -1,6 +1,147 @@
-let langData = {};
+let player = {};
+let inventory = [];
+let events = [];
 let currentLang = "en";
+let langData = {};
+let currentEventIndex = 0;
 
+// Load language file
+async function loadLanguage(lang) {
+    try {
+        const res = await fetch("lang.json");
+        const data = await res.json();
+        langData = data[lang];
+    } catch (err) {
+        console.error("Error loading language file:", err);
+    }
+}
+
+// Initialize the game
+function initGame() {
+    player = {
+        name: "Hero",
+        hp: 100,
+        attack: 10,
+        defense: 5,
+        gold: 0
+    };
+    inventory = [];
+    events = generateEvents();
+    currentEventIndex = 0;
+
+    updateStats();
+    showEvent();
+}
+
+// Generate events (basic example, can expand)
+function generateEvents() {
+    return [
+        { text: langData.event_intro, choices: [
+            { text: langData.choice_forward, action: () => nextEvent() },
+            { text: langData.choice_search, action: () => findItem() },
+            { text: langData.choice_rest, action: () => rest() }
+        ]},
+        { text: langData.event_enemy, choices: [
+            { text: langData.choice_fight, action: () => startCombat() },
+            { text: langData.choice_run, action: () => nextEvent() }
+        ]},
+        { text: langData.event_treasure, choices: [
+            { text: langData.choice_take, action: () => takeTreasure() },
+            { text: langData.choice_leave, action: () => nextEvent() }
+        ]}
+    ];
+}
+
+// Show current event
+function showEvent() {
+    const eventText = document.getElementById("eventText");
+    const choicesDiv = document.getElementById("choices");
+    const event = events[currentEventIndex];
+
+    eventText.textContent = event.text;
+    choicesDiv.innerHTML = "";
+
+    event.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice.text;
+        btn.onclick = choice.action;
+        choicesDiv.appendChild(btn);
+    });
+}
+
+// Move to next event
+function nextEvent() {
+    currentEventIndex++;
+    if (currentEventIndex >= events.length) {
+        endGame(true);
+    } else {
+        showEvent();
+    }
+}
+
+// Find item
+function findItem() {
+    const items = [langData.item_potion, langData.item_sword, langData.item_shield];
+    const found = items[Math.floor(Math.random() * items.length)];
+    inventory.push(found);
+    updateInventory();
+    nextEvent();
+}
+
+// Rest
+function rest() {
+    player.hp = Math.min(player.hp + 10, 100);
+    updateStats();
+    nextEvent();
+}
+
+// Take treasure
+function takeTreasure() {
+    player.gold += Math.floor(Math.random() * 50) + 10;
+    updateStats();
+    nextEvent();
+}
+
+// Start combat
+function startCombat() {
+    const enemy = { name: langData.enemy_goblin, hp: 30, attack: 8, defense: 3 };
+    startBattle(player, enemy, (win) => {
+        if (win) {
+            player.gold += 20;
+            updateStats();
+            nextEvent();
+        } else {
+            endGame(false);
+        }
+    });
+}
+
+// Update stats display
+function updateStats() {
+    document.getElementById("stats").textContent =
+        `${langData.stat_hp}: ${player.hp} | ${langData.stat_attack}: ${player.attack} | ${langData.stat_defense}: ${player.defense} | ${langData.stat_gold}: ${player.gold}`;
+}
+
+// Update inventory display
+function updateInventory() {
+    document.getElementById("inventory").textContent = `${langData.inventory}: ${inventory.join(", ")}`;
+}
+
+// End game
+function endGame(win) {
+    const eventText = document.getElementById("eventText");
+    const choicesDiv = document.getElementById("choices");
+
+    if (win) {
+        eventText.textContent = langData.game_win;
+    } else {
+        eventText.textContent = langData.game_over;
+    }
+    choicesDiv.innerHTML = "";
+    document.getElementById("retryBtn").style.display = "inline-block";
+}
+
+// Event listeners for welcome page
 document.addEventListener("DOMContentLoaded", () => {
     const startBtn = document.getElementById("startGameBtn");
     const retryBtn = document.getElementById("retryBtn");
@@ -10,10 +151,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle Start Game
     startBtn.addEventListener("click", () => {
-        welcomeScreen.style.display = "none";
-        gameContainer.style.display = "block";
-        currentLang = languageSelect.value; // set chosen language
+        currentLang = languageSelect.value;
         loadLanguage(currentLang).then(() => {
+            welcomeScreen.style.display = "none";
+            gameContainer.style.display = "block";
             initGame();
         });
     });
@@ -24,146 +165,8 @@ document.addEventListener("DOMContentLoaded", () => {
         initGame();
     });
 
-    // Change language on dropdown change
+    // Handle Language Change
     languageSelect.addEventListener("change", () => {
         currentLang = languageSelect.value;
     });
 });
-
-async function loadLanguage(lang = "en") {
-  const res = await fetch("lang.json");
-  langData = await res.json();
-  currentLang = lang;
-  renderScene();
-}
-
-const player = {
-  health: 100,
-  strength: 10,
-  inventory: []
-};
-
-function displayStats() {
-  const statsDiv = document.getElementById("stats");
-  statsDiv.textContent = `${langData[currentLang].stats.health}: ${player.health} | ${langData[currentLang].stats.strength}: ${player.strength}`;
-}
-
-function displayInventory() {
-  const invDiv = document.getElementById("inventory");
-  if (player.inventory.length === 0) {
-    invDiv.textContent = langData[currentLang].stats.inventory_empty;
-  } else {
-    invDiv.textContent = `${langData[currentLang].stats.inventory}: ${player.inventory.join(", ")}`;
-  }
-}
-
-let currentScene = "start";
-let storyExtra = "";
-
-const storyEl = document.getElementById("story");
-const choicesEl = document.getElementById("choices");
-
-const scenesLogic = {
-  start: { choices: ["cellLook", "doorTry", "shout", "rest"] },
-  cellLook: {
-    onEnter: () => {
-      if (!player.inventory.includes("Rusty Key")) {
-        player.inventory.push("Rusty Key");
-        storyExtra = langData[currentLang].scenes.cellLook.text_found;
-      } else {
-        storyExtra = langData[currentLang].scenes.cellLook.text_seen;
-      }
-    },
-    choices: ["doorOpen", "doorTry", "searchCell"]
-  },
-  searchCell: { choices: ["doorOpen", "doorTry"] },
-  doorTry: { choices: ["cellLook", "shout", "rest"] },
-  doorOpen: { choices: ["sneak", "callOut", "start"] },
-  shout: { choices: ["cellLook", "wait"] },
-  rest: {
-    onEnter: () => {
-      const healed = Math.min(20, 100 - player.health);
-      player.health += healed;
-      storyExtra = langData[currentLang].scenes.rest.heal
-        .replace("{healed}", healed)
-        .replace("{health}", player.health);
-    },
-    choices: ["cellLook", "doorTry"]
-  },
-  wait: { choices: ["fight", "reason"] },
-  fight: {
-    choices: [() => { startCombat("guard"); return currentScene; }]
-  },
-  reason: { choices: ["start"] },
-  gameOver: { choices: ["start"] }
-};
-
-const randomEvents = [
-  () => {
-    if (player.health < 100 && Math.random() < 0.2) {
-      player.health = Math.min(100, player.health + 20);
-      return langData[currentLang].events.herb;
-    }
-    return null;
-  },
-  () => {
-    if (Math.random() < 0.15) {
-      player.inventory.push("Gold Coin");
-      return langData[currentLang].events.coin;
-    }
-    return null;
-  },
-  () => {
-    if (player.health > 30 && Math.random() < 0.1) {
-      player.health -= 15;
-      return langData[currentLang].events.trap;
-    }
-    return null;
-  }
-];
-
-function renderScene() {
-  if (!langData[currentLang]) return;
-
-  if (inCombat) {
-    renderCombatScene();
-    return;
-  }
-
-  storyExtra = "";
-  const sceneText = langData[currentLang].scenes[currentScene];
-  const sceneLogic = scenesLogic[currentScene];
-
-  if (sceneLogic?.onEnter) sceneLogic.onEnter();
-
-  storyEl.textContent = (sceneText.text || "") + (storyExtra ? "\n" + storyExtra : "");
-
-  displayStats();
-  displayInventory();
-
-  choicesEl.innerHTML = "";
-  const choices = sceneText.choices;
-  choices.forEach((choiceText, idx) => {
-    const btn = document.createElement("button");
-    btn.textContent = choiceText;
-    btn.onclick = () => {
-      const nextLogic = sceneLogic?.choices[idx];
-      if (typeof nextLogic === "function") {
-        currentScene = nextLogic();
-      } else {
-        currentScene = nextLogic;
-      }
-      let eventText = null;
-      for (const event of randomEvents) {
-        eventText = event();
-        if (eventText) break;
-      }
-      if (eventText) storyExtra = eventText;
-      renderScene();
-    };
-    choicesEl.appendChild(btn);
-  });
-}
-
-// Start game in default language
-loadLanguage("en");

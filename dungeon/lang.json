@@ -15,49 +15,83 @@
     "scenes": {
       "start": {
         "text": "🛌 You wake up in a dark dungeon cell. The air is damp and cold.\nWhat will you do?",
-        "choices": ["🔍 Look around the cell", "🚪 Try to open the door", "📣 Shout for help", "🛏️ Rest for a moment"]
+        "choices": [
+          { "text": "🔍 Look around the cell", "next": "cellLook" },
+          { "text": "🚪 Try to open the door", "next": "doorTry" },
+          { "text": "📣 Shout for help", "next": "shout" },
+          { "text": "🛏️ Rest for a moment", "next": "rest" }
+        ]
       },
       "cellLook": {
-        "text_found": "👀 You look around and find a rusty key on the floor.\n🗝️ You picked up a Rusty Key!",
-        "text_seen": "👀 You see the place where you found the Rusty Key.",
-        "choices": ["🔑 Try the key on the door", "🚪 Ignore the key and try door", "👀 Search for more items"]
+        "text": "👀 You look around and find a rusty key on the floor.\n🗝️ You picked up a Rusty Key!",
+        "choices": [
+          { "text": "🔑 Try the key on the door", "next": "doorOpen" },
+          { "text": "🚪 Ignore the key and try door", "next": "doorTry" },
+          { "text": "👀 Search for more items", "next": "searchCell" }
+        ]
       },
       "searchCell": {
         "text": "🕸️ You find nothing else but cobwebs.",
-        "choices": ["🔑 Try the key on the door", "🚪 Try the door without the key"]
+        "choices": [
+          { "text": "🔑 Try the key on the door", "next": "doorOpen" },
+          { "text": "🚪 Try the door without the key", "next": "doorTry" }
+        ]
       },
       "doorTry": {
         "text": "🔒 The door is locked tight.\nYou need a key to open it.",
-        "choices": ["🔍 Search for a key", "📣 Call for help", "🛏️ Rest and gather strength"]
+        "choices": [
+          { "text": "🔍 Search for a key", "next": "cellLook" },
+          { "text": "📣 Call for help", "next": "shout" },
+          { "text": "🛏️ Rest and gather strength", "next": "rest" }
+        ]
       },
       "doorOpen": {
         "text": "🗝️ The key fits! You unlock the door and step into a dim corridor.\nYou hear faint footsteps.",
-        "choices": ["🤫 Sneak forward quietly", "📢 Call out to whoever is there", "🔙 Go back inside the cell"]
+        "choices": [
+          { "text": "🤫 Sneak forward quietly", "next": "wait" },
+          { "text": "📢 Call out to whoever is there", "next": "wait" },
+          { "text": "🔙 Go back inside the cell", "next": "start" }
+        ]
       },
       "shout": {
         "text": "📣 You shout for help, but no one responds.\nThe silence is unsettling.",
-        "choices": ["🔍 Search for a key", "🛏️ Sit down and wait"]
+        "choices": [
+          { "text": "🔍 Search for a key", "next": "cellLook" },
+          { "text": "🛏️ Sit down and wait", "next": "rest" }
+        ]
       },
       "rest": {
         "text": "😴 You take a short rest and recover some health.",
         "heal": "💖 Health +{healed}. Current health: {health}",
-        "choices": ["🔍 Look around the cell", "🚪 Try the door"]
+        "choices": [
+          { "text": "🔍 Look around the cell", "next": "cellLook" },
+          { "text": "🚪 Try the door", "next": "doorTry" }
+        ]
       },
       "wait": {
         "text": "⏳ You wait for what feels like hours.\nSuddenly, a guard opens the door!",
-        "choices": ["⚔️ Fight the guard", "🗣️ Try to reason"]
+        "choices": [
+          { "text": "⚔️ Fight the guard", "next": "fight" },
+          { "text": "🗣️ Try to reason", "next": "reason" }
+        ]
       },
       "fight": {
         "text": "⚔️ You prepare to fight the dungeon guard!",
-        "choices": ["Start Fight"]
+        "choices": [
+          { "text": "Start Fight", "next": "gameOver" }
+        ]
       },
       "reason": {
         "text": "🗣️ You convince the guard to let you go.\nYou escape the dungeon! Congratulations! 🎉",
-        "choices": ["🔄 Play again"]
+        "choices": [
+          { "text": "🔄 Play again", "next": "start" }
+        ]
       },
       "gameOver": {
         "text": "☠️ Your adventure ends here...\nGame Over.",
-        "choices": ["🔄 Restart"]
+        "choices": [
+          { "text": "🔄 Restart", "next": "start" }
+        ]
       }
     }
   },
@@ -76,49 +110,83 @@
     "scenes": {
       "start": {
         "text": "🛌 あなたは暗い地下牢の中で目を覚ました。空気は湿って冷たい。\nどうする？",
-        "choices": ["🔍 周囲を調べる", "🚪 ドアを開けようとする", "📣 助けを呼ぶ", "🛏️ 少し休む"]
+        "choices": [
+          { "text": "🔍 周囲を調べる", "next": "cellLook" },
+          { "text": "🚪 ドアを開けようとする", "next": "doorTry" },
+          { "text": "📣 助けを呼ぶ", "next": "shout" },
+          { "text": "🛏️ 少し休む", "next": "rest" }
+        ]
       },
       "cellLook": {
-        "text_found": "👀 周囲を調べ、床に錆びた鍵を見つけた。\n🗝️ 錆びた鍵を手に入れた！",
-        "text_seen": "👀 以前に鍵を見つけた場所が見える。",
-        "choices": ["🔑 鍵でドアを試す", "🚪 鍵を無視してドアを試す", "👀 さらに探す"]
+        "text": "👀 周囲を調べ、床に錆びた鍵を見つけた。\n🗝️ 錆びた鍵を手に入れた！",
+        "choices": [
+          { "text": "🔑 鍵でドアを試す", "next": "doorOpen" },
+          { "text": "🚪 鍵を無視してドアを試す", "next": "doorTry" },
+          { "text": "👀 さらに探す", "next": "searchCell" }
+        ]
       },
       "searchCell": {
         "text": "🕸️ クモの巣以外は何も見つからなかった。",
-        "choices": ["🔑 鍵でドアを試す", "🚪 鍵なしでドアを試す"]
+        "choices": [
+          { "text": "🔑 鍵でドアを試す", "next": "doorOpen" },
+          { "text": "🚪 鍵なしでドアを試す", "next": "doorTry" }
+        ]
       },
       "doorTry": {
         "text": "🔒 ドアはしっかり閉まっている。\n開けるには鍵が必要だ。",
-        "choices": ["🔍 鍵を探す", "📣 助けを呼ぶ", "🛏️ 休んで体力回復"]
+        "choices": [
+          { "text": "🔍 鍵を探す", "next": "cellLook" },
+          { "text": "📣 助けを呼ぶ", "next": "shout" },
+          { "text": "🛏️ 休んで体力回復", "next": "rest" }
+        ]
       },
       "doorOpen": {
         "text": "🗝️ 鍵が合った！ドアを開け、薄暗い廊下に出た。\n足音が聞こえる。",
-        "choices": ["🤫 静かに進む", "📢 声をかける", "🔙 部屋に戻る"]
+        "choices": [
+          { "text": "🤫 静かに進む", "next": "wait" },
+          { "text": "📢 声をかける", "next": "wait" },
+          { "text": "🔙 部屋に戻る", "next": "start" }
+        ]
       },
       "shout": {
         "text": "📣 助けを呼んだが、誰も返事をしない。\n不気味な静けさだ。",
-        "choices": ["🔍 鍵を探す", "🛏️ 座って待つ"]
+        "choices": [
+          { "text": "🔍 鍵を探す", "next": "cellLook" },
+          { "text": "🛏️ 座って待つ", "next": "rest" }
+        ]
       },
       "rest": {
         "text": "😴 少し休んで体力を回復した。",
         "heal": "💖 体力 +{healed}。現在の体力: {health}",
-        "choices": ["🔍 周囲を調べる", "🚪 ドアを試す"]
+        "choices": [
+          { "text": "🔍 周囲を調べる", "next": "cellLook" },
+          { "text": "🚪 ドアを試す", "next": "doorTry" }
+        ]
       },
       "wait": {
         "text": "⏳ 長い時間待った後、突然、看守がドアを開けた！",
-        "choices": ["⚔️ 看守と戦う", "🗣️ 説得する"]
+        "choices": [
+          { "text": "⚔️ 看守と戦う", "next": "fight" },
+          { "text": "🗣️ 説得する", "next": "reason" }
+        ]
       },
       "fight": {
         "text": "⚔️ あなたは看守との戦いに備える！",
-        "choices": ["戦闘開始"]
+        "choices": [
+          { "text": "戦闘開始", "next": "gameOver" }
+        ]
       },
       "reason": {
         "text": "🗣️ 看守を説得して解放された！\n脱出成功！ 🎉",
-        "choices": ["🔄 もう一度遊ぶ"]
+        "choices": [
+          { "text": "🔄 もう一度遊ぶ", "next": "start" }
+        ]
       },
       "gameOver": {
         "text": "☠️ あなたの冒険はここで終わった…\nゲームオーバー。",
-        "choices": ["🔄 再挑戦"]
+        "choices": [
+          { "text": "🔄 再挑戦", "next": "start" }
+        ]
       }
     }
   }

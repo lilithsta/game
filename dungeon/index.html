@@ -21,15 +21,16 @@
 
     <!-- Game Container -->
     <div id="gameContainer" style="display:none;">
-        <div id="stats">
-            <p id="playerStats"></p>
-        </div>
-        <div id="inventory">
-            <p id="playerInventory"></p>
-        </div>
-        <div id="gameText"></div>
-        <div id="choices"></div>
-        <button id="retryBtn" style="display:none;">Retry</button>
+      <div id="stats">
+        <p id="playerStats"></p>
+      </div>
+      <div id="inventory">
+        <p id="playerInventory"></p>
+      </div>
+      <!-- This element must exist for renderScene -->
+      <div id="sceneText"></div>  
+      <div id="choices"></div>
+      <button id="retryBtn" style="display:none;">Retry</button>
     </div>
 
     <script src="combat.js"></script>

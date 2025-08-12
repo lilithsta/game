@@ -1,22 +1,18 @@
-/* 重置并撑满屏幕 */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   overflow: hidden;
   background-color: #000;
-  -webkit-tap-highlight-color: transparent; /* 去掉手机点击高亮 */
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* canvas 全屏铺满 */
 #gameCanvas {
   display: block;
-  width: 100vw;
-  height: 100vh;
+  margin: 0 auto; /* 水平居中 */
   background-color: #222;
 }
 
-/* 按钮固定底部居中，易于手机点击 */
 #retryBtn {
   position: fixed;
   bottom: 20px;
@@ -29,7 +25,7 @@ html, body {
   background-color: #ffcc00;
   color: #000;
   cursor: pointer;
-  display: none; /* 默认隐藏 */
+  display: none;
   user-select: none;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   transition: background-color 0.3s ease;

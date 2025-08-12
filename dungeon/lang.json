@@ -1,0 +1,125 @@
+{
+  "languages": ["en", "jp"],
+  "en": {
+    "stats": {
+      "health": "❤️ Health",
+      "strength": "💪 Strength",
+      "inventory_empty": "🎒 Inventory: (empty)",
+      "inventory": "🎒 Inventory"
+    },
+    "events": {
+      "herb": "🍃 You found a healing herb! Health +20.",
+      "coin": "💰 You found a shiny Gold Coin!",
+      "trap": "⚠️ You triggered a minor trap and lost 15 health."
+    },
+    "scenes": {
+      "start": {
+        "text": "🛌 You wake up in a dark dungeon cell. The air is damp and cold.\nWhat will you do?",
+        "choices": ["🔍 Look around the cell", "🚪 Try to open the door", "📣 Shout for help", "🛏️ Rest for a moment"]
+      },
+      "cellLook": {
+        "text_found": "👀 You look around and find a rusty key on the floor.\n🗝️ You picked up a Rusty Key!",
+        "text_seen": "👀 You see the place where you found the Rusty Key.",
+        "choices": ["🔑 Try the key on the door", "🚪 Ignore the key and try door", "👀 Search for more items"]
+      },
+      "searchCell": {
+        "text": "🕸️ You find nothing else but cobwebs.",
+        "choices": ["🔑 Try the key on the door", "🚪 Try the door without the key"]
+      },
+      "doorTry": {
+        "text": "🔒 The door is locked tight.\nYou need a key to open it.",
+        "choices": ["🔍 Search for a key", "📣 Call for help", "🛏️ Rest and gather strength"]
+      },
+      "doorOpen": {
+        "text": "🗝️ The key fits! You unlock the door and step into a dim corridor.\nYou hear faint footsteps.",
+        "choices": ["🤫 Sneak forward quietly", "📢 Call out to whoever is there", "🔙 Go back inside the cell"]
+      },
+      "shout": {
+        "text": "📣 You shout for help, but no one responds.\nThe silence is unsettling.",
+        "choices": ["🔍 Search for a key", "🛏️ Sit down and wait"]
+      },
+      "rest": {
+        "text": "😴 You take a short rest and recover some health.",
+        "heal": "💖 Health +{healed}. Current health: {health}",
+        "choices": ["🔍 Look around the cell", "🚪 Try the door"]
+      },
+      "wait": {
+        "text": "⏳ You wait for what feels like hours.\nSuddenly, a guard opens the door!",
+        "choices": ["⚔️ Fight the guard", "🗣️ Try to reason"]
+      },
+      "fight": {
+        "text": "⚔️ You prepare to fight the dungeon guard!",
+        "choices": ["Start Fight"]
+      },
+      "reason": {
+        "text": "🗣️ You convince the guard to let you go.\nYou escape the dungeon! Congratulations! 🎉",
+        "choices": ["🔄 Play again"]
+      },
+      "gameOver": {
+        "text": "☠️ Your adventure ends here...\nGame Over.",
+        "choices": ["🔄 Restart"]
+      }
+    }
+  },
+  "jp": {
+    "stats": {
+      "health": "❤️ 体力",
+      "strength": "💪 力",
+      "inventory_empty": "🎒 持ち物: (なし)",
+      "inventory": "🎒 持ち物"
+    },
+    "events": {
+      "herb": "🍃 回復草を見つけた！ 体力+20。",
+      "coin": "💰 輝く金貨を見つけた！",
+      "trap": "⚠️ 小さな罠を踏み、体力を15失った。"
+    },
+    "scenes": {
+      "start": {
+        "text": "🛌 あなたは暗い地下牢の中で目を覚ました。空気は湿って冷たい。\nどうする？",
+        "choices": ["🔍 周囲を調べる", "🚪 ドアを開けようとする", "📣 助けを呼ぶ", "🛏️ 少し休む"]
+      },
+      "cellLook": {
+        "text_found": "👀 周囲を調べ、床に錆びた鍵を見つけた。\n🗝️ 錆びた鍵を手に入れた！",
+        "text_seen": "👀 以前に鍵を見つけた場所が見える。",
+        "choices": ["🔑 鍵でドアを試す", "🚪 鍵を無視してドアを試す", "👀 さらに探す"]
+      },
+      "searchCell": {
+        "text": "🕸️ クモの巣以外は何も見つからなかった。",
+        "choices": ["🔑 鍵でドアを試す", "🚪 鍵なしでドアを試す"]
+      },
+      "doorTry": {
+        "text": "🔒 ドアはしっかり閉まっている。\n開けるには鍵が必要だ。",
+        "choices": ["🔍 鍵を探す", "📣 助けを呼ぶ", "🛏️ 休んで体力回復"]
+      },
+      "doorOpen": {
+        "text": "🗝️ 鍵が合った！ドアを開け、薄暗い廊下に出た。\n足音が聞こえる。",
+        "choices": ["🤫 静かに進む", "📢 声をかける", "🔙 部屋に戻る"]
+      },
+      "shout": {
+        "text": "📣 助けを呼んだが、誰も返事をしない。\n不気味な静けさだ。",
+        "choices": ["🔍 鍵を探す", "🛏️ 座って待つ"]
+      },
+      "rest": {
+        "text": "😴 少し休んで体力を回復した。",
+        "heal": "💖 体力 +{healed}。現在の体力: {health}",
+        "choices": ["🔍 周囲を調べる", "🚪 ドアを試す"]
+      },
+      "wait": {
+        "text": "⏳ 長い時間待った後、突然、看守がドアを開けた！",
+        "choices": ["⚔️ 看守と戦う", "🗣️ 説得する"]
+      },
+      "fight": {
+        "text": "⚔️ あなたは看守との戦いに備える！",
+        "choices": ["戦闘開始"]
+      },
+      "reason": {
+        "text": "🗣️ 看守を説得して解放された！\n脱出成功！ 🎉",
+        "choices": ["🔄 もう一度遊ぶ"]
+      },
+      "gameOver": {
+        "text": "☠️ あなたの冒険はここで終わった…\nゲームオーバー。",
+        "choices": ["🔄 再挑戦"]
+      }
+    }
+  }
+}

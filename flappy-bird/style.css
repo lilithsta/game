@@ -1,27 +1,40 @@
-body {
+/* 重置并撑满屏幕 */
+html, body {
   margin: 0;
-  background-color: #70c5ce;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000;
+  -webkit-tap-highlight-color: transparent; /* 去掉手机点击高亮 */
+}
+
+/* canvas 全屏铺满 */
+#gameCanvas {
+  display: block;
+  width: 100vw;
   height: 100vh;
+  background-color: #222;
 }
 
-canvas {
-  border: 2px solid #000;
-  background-color: #fff;
-}
-
+/* 按钮固定底部居中，易于手机点击 */
 #retryBtn {
-  position: absolute;
-  top: 60%;
+  position: fixed;
+  bottom: 20px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 12px 24px;
-  font-size: 18px;
-  background-color: #ffcc00;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  padding: 10px 20px;
   border: none;
   border-radius: 8px;
+  background-color: #ffcc00;
+  color: #000;
   cursor: pointer;
-  display: none;
+  display: none; /* 默认隐藏 */
+  user-select: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease;
+}
+
+#retryBtn:hover {
+  background-color: #e6b800;
 }

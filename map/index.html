@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Leaflet 4x4 Random Biome Map (128x128)</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body { height: 100%; margin: 0; }
+    #map { width: 100%; height: 100%; background: #89c2ff; }
+    .legend {
+      background: rgba(255,255,255,.9);
+      padding: 8px 10px; border-radius: 10px; line-height: 1.2;
+      font: 12px system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    }
+    .legend .row { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+    .legend .swatch { width: 16px; height: 12px; border-radius: 2px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+  // =====================
+  // 1) Utilities: Random and Clamp
+  // =====================
+  function mulberry32(seed) {
+    return function() {
+      let t = seed += 0x6D2B79F5;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  // =====================
+  // 2) Map Parameters
+  // =====================
+  const seedBase = 1337;
+  const WORLD_SIZE = 128;
+  const TILE = 32;
+  const MAX_ZOOM = 7;
+  const MIN_ZOOM = 0;
+  const TILES_PER_AXIS = 4; // 4x4 grid
+
+  // Pre-generate biome for each tile
+  const random = mulberry32(seedBase);
+  const tileBiomes = new Array(TILES_PER_AXIS * TILES_PER_AXIS).fill().map(() => {
+    const r = random();
+    if (r < 0.11) return { biome: 'Deep Ocean', color: [20, 80, 150] };
+    if (r < 0.22) return { biome: 'Shallow Ocean', color: [40, 120, 190] };
+    if (r < 0.33) return { biome: 'Beach', color: [240, 220, 140] };
+    if (r < 0.44) return { biome: 'High Mountains', color: [160, 160, 170] };
+    if (r < 0.55) return { biome: 'Snow Peaks', color: [220, 220, 230] };
+    if (r < 0.66) return { biome: 'Desert', color: [200, 180, 120] };
+    if (r < 0.77) return { biome: 'Grassland', color: [140, 160, 80] };
+    if (r < 0.88) return { biome: 'Forest', color: [80, 130, 70] };
+    return { biome: 'Rainforest', color: [45, 90, 55] };
+  });
+
+  // =====================
+  // 3) Main Range Check Function
+  // =====================
+  function isMainRange(coords) {
+    //if (coords.z >= 2) return false; // Only zoom <2 tiles need this check
+    const scale = 1 << coords.z;       // how many zoom<2 tiles fit per zoom2 tile
+    const xStart = 0;
+    const yStart = -1;
+    const xEnd = xStart + scale * TILES_PER_AXIS - 1;
+    const yEnd = yStart - scale * TILES_PER_AXIS + 1;
+
+    const overlapX = coords.x >= xStart && coords.x <= xEnd;
+    const overlapY = coords.y >= yEnd && coords.y <= yStart;
+
+    return overlapX && overlapY;
+  }
+
+  // =====================
+  // 4) Leaflet: Custom Tile Layer
+  // =====================
+  const TerrainLayer = L.GridLayer.extend({
+      createTile: function(coords) {
+      const tile = L.DomUtil.create('canvas', '');
+      const tileSize = this.getTileSize();
+      tile.width = tileSize.x;
+      tile.height = tileSize.y;
+      const ctx = tile.getContext('2d');
+
+      let biomeData = { biome: 'Deep Ocean', color: [20, 80, 150] }; // default blue
+
+      if (coords.z < 2) {
+          biomeData = isMainRange(coords)
+              ? { biome: 'Main Range', color: [100, 180, 80] }
+              : { biome: 'Deep Ocean', color: [20, 80, 150] };
+      } else if (coords.z === 2) {
+          const x = ((coords.x % TILES_PER_AXIS) + TILES_PER_AXIS) % TILES_PER_AXIS;
+          const y = ((coords.y % TILES_PER_AXIS) + TILES_PER_AXIS) % TILES_PER_AXIS;
+          const tileIndex = y * TILES_PER_AXIS + x;
+          biomeData = isMainRange(coords)
+              ? tileBiomes[tileIndex]
+              : { biome: 'Deep Ocean', color: [20, 80, 150] };
+      } else if (coords.z > 2) {
+          const scale = 1 << (coords.z - 2);
+          const x2 = Math.floor(coords.x / scale);
+          const y2 = Math.floor(coords.y / scale);
+          const xWrapped = ((x2 % TILES_PER_AXIS) + TILES_PER_AXIS) % TILES_PER_AXIS;
+          const yWrapped = ((y2 % TILES_PER_AXIS) + TILES_PER_AXIS) % TILES_PER_AXIS;
+          const tileIndex = yWrapped * TILES_PER_AXIS + xWrapped;
+          biomeData = isMainRange(coords)
+              ? tileBiomes[tileIndex]
+              : { biome: 'Deep Ocean', color: [20, 80, 150] };
+      }
+
+      // Draw tile
+      ctx.fillStyle = `rgb(${biomeData.color[0]}, ${biomeData.color[1]}, ${biomeData.color[2]})`;
+      ctx.fillRect(0, 0, tileSize.x, tileSize.y);
+
+      // Label coordinates at zoom 2
+      if (coords.z >= 0){
+        ctx.fillStyle = 'black';
+        ctx.font = `${TILE/3}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`(${coords.x},${coords.y})`, tileSize.x / 2, tileSize.y / 2);
+      }
+
+      return tile;
+    }
+  });
+
+  // =====================
+  // 5) Initialize Leaflet Map
+  // =====================
+  const map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: MIN_ZOOM,
+    maxZoom: MAX_ZOOM,
+    zoomControl: true,
+    preferCanvas: true
+  });
+
+  const bounds = [[0, 0], [WORLD_SIZE, WORLD_SIZE]];
+  const center = [WORLD_SIZE / 2, WORLD_SIZE / 2];
+  const viewportSize = Math.min(window.innerWidth, window.innerHeight);
+  const zoom = Math.floor(Math.log2(viewportSize / TILE)) - 1;
+  map.setView(center, Math.max(MIN_ZOOM, Math.min(2, zoom)));
+  map.setMaxBounds(bounds);
+
+  // Add overall map border
+  L.rectangle(bounds, { color: '#000000', weight: 3, fill: false, opacity: 0.8 }).addTo(map);
+
+  // Add individual tile borders (zoom2)
+  for (let y = 0; y < TILES_PER_AXIS; y++) {
+    for (let x = 0; x < TILES_PER_AXIS; x++) {
+      const tileBounds = [
+        [y * TILE, x * TILE],
+        [(y + 1) * TILE, (x + 1) * TILE]
+      ];
+      L.rectangle(tileBounds, { color: '#333333', weight: 1, fill: false, opacity: 0.6 }).addTo(map);
+    }
+  }
+
+  const terrain = new TerrainLayer({ tileSize: TILE, updateWhenZooming: false, updateWhenIdle: true });
+  terrain.addTo(map);
+
+  // =====================
+  // 6) Interaction: Click to Sample Point
+  // =====================
+  function sampleAt(latlng) {
+    const x = clamp(latlng.lng, 0, WORLD_SIZE);
+    const y = clamp(latlng.lat, 0, WORLD_SIZE);
+    const tileX = Math.floor(x / (WORLD_SIZE / TILES_PER_AXIS));
+    const tileY = Math.floor(y / (WORLD_SIZE / TILES_PER_AXIS));
+    const tileIndex = tileY * TILES_PER_AXIS + tileX;
+    const biomeData = tileIndex >= 0 && tileIndex < tileBiomes.length ? tileBiomes[tileIndex] : { biome: 'Deep Ocean', color: [20, 80, 150] };
+    return { biome: biomeData.biome, x, y };
+  }
+
+  map.on('click', (e) => {
+    const s = sampleAt(e.latlng);
+    const html = `<b>Biome:</b> ${s.biome}<br/>
+                  <b>Coordinates:</b> (${s.x.toFixed(0)}, ${s.y.toFixed(0)})`;
+    L.popup().setLatLng(e.latlng).setContent(html).openOn(map);
+  });
+
+  // =====================
+  // 7) Toggleable Grid Layer
+  // =====================
+  const GridLayer = L.GridLayer.extend({
+    createTile: function(coords) {
+      const tile = L.DomUtil.create('canvas', '');
+      tile.width = TILE;
+      tile.height = TILE;
+      const ctx = tile.getContext('2d');
+      ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(0, 0, TILE, TILE);
+      return tile;
+    }
+  });
+  const gridLayer = new GridLayer({ tileSize: TILE });
+
+  const baseLayers = { "Terrain": terrain };
+  const overlayLayers = { "Grid": gridLayer };
+  L.control.layers(baseLayers, overlayLayers, { collapsed: false }).addTo(map);
+  gridLayer.addTo(map);
+
+  // =====================
+  // 8) Controls: Scale & Legend
+  // =====================
+  L.control.scale({ metric: true, imperial: false, maxWidth: 200 }).addTo(map);
+
+  const Legend = L.Control.extend({
+    options: { position: 'topright' },
+    onAdd: function() {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <div><b>Biomes</b></div>
+        <div class="row"><span class="swatch" style="background:#145096"></span> Deep Ocean</div>
+        <div class="row"><span class="swatch" style="background:#2878be"></span> Shallow Ocean</div>
+        <div class="row"><span class="swatch" style="background:#f0dc8c"></span> Beach</div>
+        <div class="row"><span class="swatch" style="background:#c8b478"></span> Desert</div>
+        <div class="row"><span class="swatch" style="background:#8ca050"></span> Grassland</div>
+        <div class="row"><span class="swatch" style="background:#508246"></span> Forest</div>
+        <div class="row"><span class="swatch" style="background:#2d5a37"></span> Rainforest</div>
+        <div class="row"><span class="swatch" style="background:#dcdce6"></span> Snow Peaks</div>
+        <div class="row"><span class="swatch" style="background:#a0a0aa"></span> High Mountains</div>
+        <div class="row"><span class="swatch" style="background:#64b450"></span> Main Range</div>
+        <div style="margin-top:6px; opacity:.7">Click map to view biome details</div>
+      `;
+      return div;
+    }
+  });
+  map.addControl(new Legend());
+  </script>
+</body>
+</html>

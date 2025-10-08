@@ -154,7 +154,14 @@ await fetch("tarotDeck.json").then(r=>r.json()).then(d=>tarotDeck=d)
 .catch(()=>alert("❌ 无法加载 tarotDeck.json"));
 
 // 图片路径
-function getImgUrl(id,suit){return `images/${suit.toLowerCase()}${String(id).padStart(2,"0")}.jpg`;}
+function getImgUrl(id, suit){
+  if(!suit){
+    console.warn("⚠️ suit is undefined for card id:", id);
+    return "images/default.jpg"; // 放一张占位图
+  }
+  return `images/${String(suit).toLowerCase()}${String(id).padStart(2,"0")}.jpg`;
+}
+
 
 // 多语言字典
 const i18n={

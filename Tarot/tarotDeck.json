@@ -66,5 +66,19 @@
   {"id":12,"suit":"s","name":{"zh":"宝剑骑士","en":"Knight of Swords","jp":"ソードのナイト"},"meaning":{"zh":"快速行动与冲动。","en":"Swift action and ambition.","jp":"迅速な行動。"}},
   {"id":13,"suit":"s","name":{"zh":"宝剑王后","en":"Queen of Swords","jp":"ソードのクイーン"},"meaning":{"zh":"理智与洞察。","en":"Intellect and clarity.","jp":"理性と洞察。"}},
   {"id":14,"suit":"s","name":{"zh":"宝剑国王","en":"King of Swords","jp":"ソードのキング"},"meaning":{"zh":"逻辑与权威。","en":"Logic and authority.","jp":"論理と権威。"}},
-
+  
+  {"id":1,"suit":"p","name":{"zh":"钱币王牌","en":"Ace of Pentacles","jp":"ペンタクルのエース"},"meaning":{"zh":"新的财富与机会。","en":"New material opportunity and prosperity.","jp":"新しい豊かさと機会。"}},
+  {"id":2,"suit":"p","name":{"zh":"钱币二","en":"Two of Pentacles","jp":"ペンタクルの2"},"meaning":{"zh":"平衡与多任务。","en":"Balance and multitasking.","jp":"バランスと両立。"}},
+  {"id":3,"suit":"p","name":{"zh":"钱币三","en":"Three of Pentacles","jp":"ペンタクルの3"},"meaning":{"zh":"合作与技艺。","en":"Teamwork and skill mastery.","jp":"協力と技術の熟練。"}},
+  {"id":4,"suit":"p","name":{"zh":"钱币四","en":"Four of Pentacles","jp":"ペンタクルの4"},"meaning":{"zh":"控制与占有。","en":"Control and security.","jp":"支配と安定。"}},
+  {"id":5,"suit":"p","name":{"zh":"钱币五","en":"Five of Pentacles","jp":"ペンタクルの5"},"meaning":{"zh":"贫困与排斥。","en":"Loss and hardship.","jp":"困難と喪失。"}},
+  {"id":6,"suit":"p","name":{"zh":"钱币六","en":"Six of Pentacles","jp":"ペンタクルの6"},"meaning":{"zh":"给予与接纳。","en":"Generosity and sharing.","jp":"与えることと受け取ること。"}},
+  {"id":7,"suit":"p","name":{"zh":"钱币七","en":"Seven of Pentacles","jp":"ペンタクルの7"},"meaning":{"zh":"耐心与等待成果。","en":"Patience and long-term view.","jp":"忍耐と長期的視野。"}},
+  {"id":8,"suit":"p","name":{"zh":"钱币八","en":"Eight of Pentacles","jp":"ペンタクルの8"},"meaning":{"zh":"勤奋与学习。","en":"Diligence and craftsmanship.","jp":"努力と職人技。"}},
+  {"id":9,"suit":"p","name":{"zh":"钱币九","en":"Nine of Pentacles","jp":"ペンタクルの9"},"meaning":{"zh":"独立与享受成果。","en":"Self-sufficiency and comfort.","jp":"独立と豊かさ。"}},
+  {"id":10,"suit":"p","name":{"zh":"钱币十","en":"Ten of Pentacles","jp":"ペンタクルの10"},"meaning":{"zh":"财富与家族传承。","en":"Legacy and long-term stability.","jp":"財産と家族の繁栄。"}},
+  {"id":11,"suit":"p","name":{"zh":"钱币侍从","en":"Page of Pentacles","jp":"ペンタクルのペイジ"},"meaning":{"zh":"学习与实践。","en":"Study and new opportunity.","jp":"学びと新しい機会。"}},
+  {"id":12,"suit":"p","name":{"zh":"钱币骑士","en":"Knight of Pentacles","jp":"ペンタクルのナイト"},"meaning":{"zh":"稳重与坚持。","en":"Diligence and responsibility.","jp":"誠実と忍耐。"}},
+  {"id":13,"suit":"p","name":{"zh":"钱币王后","en":"Queen of Pentacles","jp":"ペンタクルのクイーン"},"meaning":{"zh":"关怀与富足。","en":"Nurturing and prosperity.","jp":"思いやりと豊かさ。"}},
+  {"id":14,"suit":"p","name":{"zh":"钱币国王","en":"King of Pentacles","jp":"ペンタクルのキング"},"meaning":{"zh":"稳定与成功。","en":"Success and abundance.","jp":"安定と成功。"}}
 ]

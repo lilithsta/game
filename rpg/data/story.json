@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "title": "异世界文字冒险",
+    "start": "prologue",
+    "version": "1.0.0"
+  },
+  "scenes": {
+    "prologue": {
+      "title": "漂流瓶",
+      "location": "海边",
+      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600",
+      "text": [
+        "你在潮湿的沙滩上醒来，脑海只剩支离破碎的记忆。",
+        "浪花拍打脚踝，一枚发光的漂流瓶正随着海水滚到你身边。"
+      ],
+      "choices": [
+        { "text": "拾起漂流瓶", "next": "bottle", "give": ["发光的瓶子"] },
+        { "text": "先观察四周", "next": "look_around" }
+      ]
+    },
+
+    "bottle": {
+      "title": "瓶中信",
+      "location": "海边",
+      "image": "https://images.unsplash.com/photo-1493246318656-5bfd4cfb29b8?q=80&w=1600",
+      "text": [
+        "你拔开瓶塞，一缕暖光溢出，灼热却不刺痛。",
+        "纸条上写着：『持瓶者可获指引，代价是——记忆的一角。』"
+      ],
+      "choices": [
+        { "text": "接受指引（-1 HP，+5 金币）", "next": "guide",
+          "effects": { "hp": -1, "gold": 5 }, "setFlags": { "met_guide": true } },
+        { "text": "拒绝，保留自我", "next": "look_around", "effects": { "hp": 0 } }
+      ]
+    },
+
+    "look_around": {
+      "title": "岔路",
+      "location": "岔路口",
+      "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1600",
+      "text": [
+        "沙滩尽头是分叉的林间小道：左边幽暗、右边有微弱灯光。",
+        "风里夹杂着铃声与树叶的窸窣。"
+      ],
+      "choices": [
+        { "text": "走左边的暗林", "next": "dark_forest" },
+        { "text": "走右边的灯火", "next": "inn_gate" },
+        { "text": "检查背包", "next": "check_pack" }
+      ]
+    },
+
+    "guide": {
+      "title": "低语的光",
+      "location": "海边",
+      "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600",
+      "text": [
+        "光团化作指路的萤火：『向右，旅店会收留你。把金币藏妥，别信会笑的猫。』",
+        "你的头微微作痛，仿佛丢失了某段名字。"
+      ],
+      "choices": [
+        { "text": "按指引去右边（灯火）", "next": "inn_gate" },
+        { "text": "仍然去左边（暗林）", "next": "dark_forest" }
+      ]
+    },
+
+    "check_pack": {
+      "title": "打点行囊",
+      "location": "岔路口",
+      "image": "",
+      "text": [
+        "你低头清点行囊，沙粒落下，背带吱呀作响。"
+      ],
+      "choices": [
+        { "text": "返回岔路", "next": "look_around" }
+      ]
+    },
+
+    "inn_gate": {
+      "title": "猫之旅店",
+      "location": "小镇边",
+      "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600",
+      "text": [
+        "油灯下的招牌晃动：『猫之旅店』。",
+        "门口一只黑白相间的猫站立行礼：『客人，要寄存什么吗？』它露出人类般的笑。"
+      ],
+      "choices": [
+        { "text": "按光的建议，不要理会会笑的猫", "next": "inn_hall",
+          "require": { "flags": { "met_guide": true } } },
+        { "text": "把发光的瓶子寄存（+10 金币）", "next": "inn_hall",
+          "require": { "has": ["发光的瓶子"] }, "take": ["发光的瓶子"],
+          "effects": { "gold": 10 }, "setFlags": { "stored_bottle": true } },
+        { "text": "和猫交谈", "next": "cat_talk" }
+      ]
+    },
+
+    "cat_talk": {
+      "title": "会笑的店员",
+      "location": "旅店门口",
+      "image": "https://images.unsplash.com/photo-1487412720507-7b3e9efd3d9a?q=80&w=1600",
+      "text": [
+        "『我这里很安全，尤其是存放……会发光的东西。』猫的笑更大了。",
+        "『当然，手续费要看心情。』"
+      ],
+      "choices": [
+        { "text": "强行闯入（-2 HP）", "next": "inn_hall", "effects": { "hp": -2 }, "setFlags": { "rude_to_cat": true } },
+        { "text": "给 5 金币讨好（-5 金币，得提示）", "next": "hint_from_cat",
+          "require": { "goldMin": 5 }, "effects": { "gold": -5 } },
+        { "text": "悄悄离开", "next": "look_around" }
+      ]
+    },
+
+    "hint_from_cat": {
+      "title": "提示",
+      "location": "旅店门口",
+      "image": "",
+      "text": [
+        "猫眯起眼：『二楼 203 的钥匙在门垫下。别说是我说的。』"
+      ],
+      "choices": [
+        { "text": "进入旅店", "next": "inn_hall", "setFlags": { "knows_203": true } }
+      ]
+    },
+
+    "inn_hall": {
+      "title": "前厅",
+      "location": "猫之旅店",
+      "image": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1600",
+      "text": [
+        "温暖的木香与肉桂气息扑面而来。柜台后无人，楼梯吱呀作响。",
+        "你想起猫说的话，或光的低语。"
+      ],
+      "choices": [
+        { "text": "去二楼 203（需要提示或粗暴闯入过）", "next": "room_203",
+          "require": { "flags": { "knows_203": true } } },
+        { "text": "硬闯二楼（-1 HP）", "next": "room_203", "effects": { "hp": -1 },
+          "require": { "flags": { "rude_to_cat": true } } },
+        { "text": "在大厅休息（+2 HP）", "next": "inn_hall_rest", "effects": { "hp": 2 } },
+        { "text": "离开旅店", "next": "look_around" }
+      ]
+    },
+
+    "inn_hall_rest": {
+      "title": "壁炉小憩",
+      "location": "猫之旅店",
+      "image": "https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=1600",
+      "text": [
+        "你在壁炉前打了个盹，梦里似乎有人低声呼唤你的旧名。"
+      ],
+      "choices": [
+        { "text": "继续探索旅店", "next": "inn_hall" }
+      ]
+    },
+
+    "room_203": {
+      "title": "203的秘密",
+      "location": "二楼客房",
+      "image": "https://images.unsplash.com/photo-1505692794403-34d4982b4d82?q=80&w=1600",
+      "text": [
+        "门垫下果然有钥匙。门内陈设朴素，桌上放着一枚小巧的银质徽章。",
+        "你感觉胸口一暖，它好像在回应‘发光的瓶子’。"
+      ],
+      "choices": [
+        { "text": "拿起徽章（获得『月徽』）", "next": "badge_get", "give": ["月徽"] },
+        { "text": "不动声色离开", "next": "inn_hall" }
+      ]
+    },
+
+    "badge_get": {
+      "title": "月徽",
+      "location": "二楼客房",
+      "image": "",
+      "text": [
+        "银徽轻轻震颤，月光从指缝漏出。你想起海边的瓶子。"
+      ],
+      "choices": [
+        { "text": "带着徽章回海边", "next": "seashore_return",
+          "require": { "has": ["月徽"] } },
+        { "text": "继续在旅店探索", "next": "inn_hall" }
+      ]
+    },
+
+    "seashore_return": {
+      "title": "回到起点",
+      "location": "海边",
+      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600",
+      "text": [
+        "海风依旧，月徽与瓶子共鸣。光线缠绕成门的轮廓。",
+        "一个通往未知的门户在你面前缓缓展开。"
+      ],
+      "choices": [
+        { "text": "踏入月门（结局A）", "next": "ending_a",
+          "require": { "has": ["月徽"], "has2": ["发光的瓶子"] } },
+        { "text": "遗憾：没有瓶子（提示回旅店）", "next": "inn_gate",
+          "require": { "has": ["月徽"], "flags": {} } }
+      ]
+    },
+
+    "ending_a": {
+      "title": "月门的另一侧",
+      "location": "？？？",
+      "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600",
+      "text": [
+        "你迈入光门，记忆像潮水缓缓归来。",
+        "新的旅程在群星的注视下展开……（完）"
+      ],
+      "choices": []
+    },
+
+    "dark_forest": {
+      "title": "暗林",
+      "location": "密林",
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1600",
+      "text": [
+        "密林潮湿阴冷，脚步声在落叶上嘎吱作响。",
+        "你感觉到某种东西在注视。也许，今天不是闯林子的好时候。"
+      ],
+      "choices": [
+        { "text": "折返岔路", "next": "look_around" },
+        { "text": "硬着头皮深入（-3 HP）", "next": "lost_end", "effects": { "hp": -3 } }
+      ]
+    },
+
+    "lost_end": {
+      "title": "迷失",
+      "location": "密林深处",
+      "image": "",
+      "text": [
+        "你在错综复杂的树影间迷失太久，体力不支倒在残月下。",
+        "也许换条路会更好。"
+      ],
+      "choices": []
+    }
+  }
+}

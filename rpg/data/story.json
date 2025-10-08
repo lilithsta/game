@@ -1,20 +1,116 @@
 {
-  "meta": { "title": "Isekai Adventure", "start": "prologue" },
+  "meta": {
+    "title": "Isekai: Shore of the Lost",
+    "start": "prologue"
+  },
   "scenes": {
     "prologue": {
       "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600",
       "choices": [
         { "id": "pick_bottle", "next": "bottle" },
-        { "id": "look_around", "next": "look_around" }
+        { "id": "look_around", "next": "beach_look" }
       ]
     },
+
     "bottle": {
-      "image": "",
-      "choices": [{ "id": "read_note", "next": "look_around" }]
+      "image": "https://images.unsplash.com/photo-1493246318656-5bfd4cfb29b8?q=80&w=1600",
+      "choices": [
+        { "id": "open_bottle", "next": "bottle_message" },
+        { "id": "keep_bottle", "next": "beach_look" }
+      ]
     },
-    "look_around": {
-      "image": "",
-      "choices": [{ "id": "go_light", "next": "bottle" }]
+
+    "bottle_message": {
+      "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600",
+      "choices": [
+        { "id": "follow_light", "next": "forest_path" },
+        { "id": "ignore_light", "next": "beach_look" }
+      ]
+    },
+
+    "beach_look": {
+      "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1600",
+      "choices": [
+        { "id": "go_left_forest", "next": "dark_forest" },
+        { "id": "go_right_village", "next": "village_gate" }
+      ]
+    },
+
+    "forest_path": {
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1600",
+      "choices": [
+        { "id": "meet_sprite", "next": "forest_sprite" },
+        { "id": "keep_walking", "next": "dark_forest" }
+      ]
+    },
+
+    "forest_sprite": {
+      "image": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?q=80&w=1600",
+      "choices": [
+        { "id": "accept_help", "next": "sprite_gift" },
+        { "id": "refuse_help", "next": "dark_forest" }
+      ]
+    },
+
+    "sprite_gift": {
+      "image": "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=1600",
+      "choices": [
+        { "id": "take_flower", "next": "village_gate" }
+      ]
+    },
+
+    "dark_forest": {
+      "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600",
+      "choices": [
+        { "id": "get_lost", "next": "bad_end" },
+        { "id": "find_light", "next": "village_gate" }
+      ]
+    },
+
+    "village_gate": {
+      "image": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1600",
+      "choices": [
+        { "id": "talk_guard", "next": "guard_talk" },
+        { "id": "sneak_in", "next": "market_square" }
+      ]
+    },
+
+    "guard_talk": {
+      "image": "https://images.unsplash.com/photo-1558981033-6f0c94958bb6?q=80&w=1600",
+      "choices": [
+        { "id": "show_flower", "next": "good_end" },
+        { "id": "no_proof", "next": "market_square" }
+      ]
+    },
+
+    "market_square": {
+      "image": "https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=1600",
+      "choices": [
+        { "id": "help_merchant", "next": "sidequest" },
+        { "id": "ignore_merchant", "next": "neutral_end" }
+      ]
+    },
+
+    "sidequest": {
+      "image": "https://images.unsplash.com/photo-1484910292437-025e5d13ce87?q=80&w=1600",
+      "choices": [
+        { "id": "return_bag", "next": "good_end" }
+      ]
+    },
+
+    "good_end": {
+      "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600",
+      "choices": []
+    },
+
+    "neutral_end": {
+      "image": "https://images.unsplash.com/photo-1494571180607-f17765ead771?q=80&w=1600",
+      "choices": []
+    },
+
+    "bad_end": {
+      "image": "https://images.unsplash.com/photo-1501820488136-72669149e0d4?q=80&w=1600",
+      "choices": []
     }
   }
 }

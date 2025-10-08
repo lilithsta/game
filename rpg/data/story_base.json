@@ -27,7 +27,7 @@
     "village_square": {
       "image": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1600",
       "choices": [
-        { "id": "go_forest", "next": "forest_entry" },
+        { "id": "go_forest", "next": "forest_entry", "require": { "quest": "main_fragment", "value": "in_progress" } },
         { "id": "return_home", "next": "village_wake" }
       ]
     },
@@ -35,7 +35,7 @@
     "village_elder": {
       "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600",
       "choices": [
-        { "id": "accept_quest", "next": "forest_entry" },
+        { "id": "accept_quest", "next": "forest_entry", "effects": { "quest": "main_fragment", "questState": "in_progress" } },
         { "id": "decline", "next": "village_square" }
       ]
     },
@@ -43,7 +43,7 @@
     "village_tavern": {
       "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600",
       "choices": [
-        { "id": "buy_rumor", "next": "rumor_info", "require": { "goldMin": 5 } },
+        { "id": "buy_rumor", "next": "rumor_info", "require": { "goldMin": 5 }, "effects": { "gold": -5 } },
         { "id": "chat_merchant", "next": "merchant_offer" },
         { "id": "leave_tavern", "next": "village_square" }
       ]
@@ -52,7 +52,7 @@
     "merchant_offer": {
       "image": "https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=1600",
       "choices": [
-        { "id": "accept_escort", "next": "forest_entry" },
+        { "id": "accept_escort", "next": "forest_entry", "effects": { "quest": "merchant_escort", "questState": "in_progress" } },
         { "id": "refuse_escort", "next": "village_tavern" }
       ]
     },
@@ -76,7 +76,7 @@
     "elf_meet": {
       "image": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?q=80&w=1600",
       "choices": [
-        { "id": "accept_flower", "next": "forest_deep" },
+        { "id": "accept_flower", "next": "forest_deep", "effects": { "quest": "elf_flower", "questState": "completed", "addItem": "Dawn Flower" } },
         { "id": "refuse_flower", "next": "forest_entry" }
       ]
     },
@@ -85,7 +85,7 @@
       "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600",
       "choices": [
         { "id": "explore_ruins", "next": "ancient_ruins" },
-        { "id": "help_traveler", "next": "merchant_sidequest" },
+        { "id": "help_traveler", "next": "merchant_sidequest", "require": { "quest": "merchant_escort", "value": "in_progress" } },
         { "id": "rest_under_tree", "next": "dream_scene" }
       ]
     },
@@ -93,15 +93,15 @@
     "merchant_sidequest": {
       "image": "",
       "choices": [
-        { "id": "escort_continue", "next": "ancient_ruins" },
-        { "id": "steal_goods", "next": "evil_end" }
+        { "id": "escort_continue", "next": "ancient_ruins", "effects": { "quest": "merchant_escort", "questState": "completed", "rep": 1, "gold": 10 } },
+        { "id": "steal_goods", "next": "evil_end", "effects": { "rep": -5 } }
       ]
     },
 
     "dream_scene": {
       "image": "",
       "choices": [
-        { "id": "wake_continue", "next": "ancient_ruins" }
+        { "id": "wake_continue", "next": "ancient_ruins", "effects": { "hp": 2 } }
       ]
     },
 
@@ -116,15 +116,15 @@
     "fragment_found": {
       "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600",
       "choices": [
-        { "id": "keep_fragment", "next": "corrupt_path" },
-        { "id": "return_elder", "next": "village_return" }
+        { "id": "keep_fragment", "next": "corrupt_path", "effects": { "quest": "main_fragment", "questState": "completed", "rep": -3 } },
+        { "id": "return_elder", "next": "village_return", "effects": { "quest": "main_fragment", "questState": "completed", "rep": 5 } }
       ]
     },
 
     "village_return": {
       "image": "https://images.unsplash.com/photo-1494571180607-f17765ead771?q=80&w=1600",
       "choices": [
-        { "id": "celebration", "next": "good_end" },
+        { "id": "celebration", "next": "good_end", "require": { "repMin": 3 } },
         { "id": "prepare_travel", "next": "capital_journey" }
       ]
     },
@@ -132,15 +132,15 @@
     "corrupt_path": {
       "image": "",
       "choices": [
-        { "id": "give_in", "next": "evil_end" },
-        { "id": "resist", "next": "neutral_end" }
+        { "id": "give_in", "next": "evil_end", "effects": { "rep": -5 } },
+        { "id": "resist", "next": "neutral_end", "effects": { "rep": 1 } }
       ]
     },
 
     "capital_journey": {
       "image": "https://images.unsplash.com/photo-1549887534-4c1e1e1223d7?q=80&w=1600",
       "choices": [
-        { "id": "enter_palace", "next": "hero_end" }
+        { "id": "enter_palace", "next": "hero_end", "require": { "quest": "elf_flower", "value": "completed" } }
       ]
     },
 

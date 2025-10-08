@@ -1,17 +1,107 @@
 {
   "prologue": {
     "text": [
-      "You wake up on a strange beach.",
-      "A glowing bottle drifts to your feet."
+      "You awaken on a deserted shore, your memories washed away with the tide.",
+      "A faint glow flickers beside you—a glass bottle half-buried in sand."
     ],
     "choices": ["Pick up the bottle", "Look around the beach"]
   },
   "bottle": {
-    "text": ["Inside is a faint light and a note."],
-    "choices": ["Read the note"]
+    "text": [
+      "Inside the bottle is a rolled-up paper shimmering faintly.",
+      "A whisper echoes in your head: 'Follow the light to find your path…'"
+    ],
+    "choices": ["Open the bottle", "Keep it for later"]
   },
-  "look_around": {
-    "text": ["You see a forest path and a light in the distance."],
-    "choices": ["Head toward the light"]
+  "bottle_message": {
+    "text": [
+      "The message glows brightly, forming a trail of floating lights toward the forest.",
+      "The wind carries a voice—soft, guiding, familiar."
+    ],
+    "choices": ["Follow the lights", "Ignore and stay"]
+  },
+  "beach_look": {
+    "text": [
+      "To the left, a dark forest looms. To the right, a faint firelight flickers in the distance.",
+      "You can still hear the sea behind you."
+    ],
+    "choices": ["Head into the forest", "Go toward the firelight"]
+  },
+  "forest_path": {
+    "text": [
+      "The glowing trail leads you into the woods. Strange symbols mark the trees.",
+      "You feel a presence watching."
+    ],
+    "choices": ["Call out", "Keep walking silently"]
+  },
+  "forest_sprite": {
+    "text": [
+      "A small spirit appears, wings shimmering like glass. 'You're not from this world, are you?'",
+      "It offers you a glowing flower."
+    ],
+    "choices": ["Accept the help", "Refuse politely"]
+  },
+  "sprite_gift": {
+    "text": [
+      "You take the flower—it pulses warmly in your palm.",
+      "The spirit smiles. 'This will prove your kindness.'"
+    ],
+    "choices": ["Continue toward the village"]
+  },
+  "dark_forest": {
+    "text": [
+      "You wander deeper into the dark woods. Whispers twist around you.",
+      "The path vanishes beneath thick fog."
+    ],
+    "choices": ["You lose your way", "You see a distant light"]
+  },
+  "village_gate": {
+    "text": [
+      "A wooden gate stands before a small village.",
+      "A sleepy guard eyes you suspiciously."
+    ],
+    "choices": ["Talk to the guard", "Sneak inside quietly"]
+  },
+  "guard_talk": {
+    "text": [
+      "'Travelers need a token of trust,' says the guard.",
+      "He glances at your hands expectantly."
+    ],
+    "choices": ["Show the glowing flower", "You have nothing to show"]
+  },
+  "market_square": {
+    "text": [
+      "Inside, a busy market hums with life. Merchants shout and barter.",
+      "One merchant drops his bag of gold nearby."
+    ],
+    "choices": ["Help the merchant", "Ignore and walk away"]
+  },
+  "sidequest": {
+    "text": [
+      "You return the merchant’s bag. He bows deeply and hands you a silver charm.",
+      "'May luck follow you, stranger.'"
+    ],
+    "choices": ["Continue your journey"]
+  },
+  "good_end": {
+    "text": [
+      "The guard lets you in. The village welcomes you as a traveler of light.",
+      "Under the moon, your new life in this world begins."
+    ],
+    "choices": []
+  },
+  "neutral_end": {
+    "text": [
+      "You live quietly among strangers, never discovering your true purpose.",
+      "But peace has its own reward."
+    ],
+    "choices": []
+  },
+  "bad_end": {
+    "text": [
+      "Lost in the forest, you sink into the mist as your memories fade once more.",
+      "The sea never answers your cries."
+    ],
+    "choices": []
   }
 }

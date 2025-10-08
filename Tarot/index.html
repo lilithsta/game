@@ -171,10 +171,10 @@ const meaning=document.getElementById("meaning");
 const langSelect=document.getElementById("langSelect");
 
 /* --- URL builder --- */
-function getImgUrl(id,suit){
-  const safeSuit=(suit?suit.toUpperCase():"M");
-  const num=String(id).padStart(2,"0");
-  return `https://raw.githubusercontent.com/lambiengcode/flutter-tarot-card/master/images/${safeSuit}${num}.png`;
+function getImgUrl(id, suit) {
+  const safeSuit = (suit ? suit.toUpperCase() : "M");
+  const num = String(id).padStart(2, "0");
+  return `images/${safeSuit}${num}.png`;
 }
 
 /* --- Save/Load --- */

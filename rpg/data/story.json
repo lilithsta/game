@@ -1,81 +1,20 @@
 {
-  "meta": {
-    "title": "Isekai Adventure",
-    "start": "prologue"
-  },
+  "meta": { "title": "Isekai Adventure", "start": "prologue" },
   "scenes": {
     "prologue": {
       "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600",
-      "text": [
-        {
-          "en": "You wake up on a strange beach. Waves crash nearby.",
-          "zh": "你在陌生的沙滩上醒来，海浪在身边拍打。",
-          "jp": "見知らぬ浜辺で目を覚ます。波が近くで砕けている。"
-        },
-        {
-          "en": "A glowing bottle drifts to your feet.",
-          "zh": "一只发光的瓶子漂到你脚边。",
-          "jp": "光る瓶が足元に漂い着く。"
-        }
-      ],
       "choices": [
-        {
-          "text": {
-            "en": "Pick up the bottle",
-            "zh": "捡起瓶子",
-            "jp": "瓶を拾う"
-          },
-          "next": "bottle"
-        },
-        {
-          "text": {
-            "en": "Look around the beach",
-            "zh": "环顾四周",
-            "jp": "周囲を見渡す"
-          },
-          "next": "look_around"
-        }
+        { "id": "pick_bottle", "next": "bottle" },
+        { "id": "look_around", "next": "look_around" }
       ]
     },
     "bottle": {
       "image": "",
-      "text": [
-        {
-          "en": "Inside is a faint light and a note.",
-          "zh": "里面有微光和一张纸条。",
-          "jp": "中には淡い光と一枚の紙がある。"
-        }
-      ],
-      "choices": [
-        {
-          "text": {
-            "en": "Read the note",
-            "zh": "读纸条",
-            "jp": "紙を読む"
-          },
-          "next": "look_around"
-        }
-      ]
+      "choices": [{ "id": "read_note", "next": "look_around" }]
     },
     "look_around": {
       "image": "",
-      "text": [
-        {
-          "en": "You see a forest path and a small light in the distance.",
-          "zh": "你看到一条通往森林的小路，远处有微光。",
-          "jp": "森への小道と遠くの微かな光が見える。"
-        }
-      ],
-      "choices": [
-        {
-          "text": {
-            "en": "Head toward the light",
-            "zh": "走向光亮",
-            "jp": "光の方へ進む"
-          },
-          "next": "bottle"
-        }
-      ]
+      "choices": [{ "id": "go_light", "next": "bottle" }]
     }
   }
 }

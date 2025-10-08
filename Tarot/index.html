@@ -5,8 +5,7 @@
 <title>今日塔罗占卜 Tarot of the Day</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body{background:radial-gradient(circle at center,#1a1b2f,#0d1321);color:#fff;
-font-family:"Noto Sans SC","Noto Sans JP",sans-serif;text-align:center;margin:0;padding:0;transition:background 1s ease;}
+body{background:radial-gradient(circle at center,#1a1b2f,#0d1321);color:#fff;font-family:"Noto Sans SC","Noto Sans JP",sans-serif;text-align:center;margin:0;padding:0;transition:background 1s ease;}
 h1{margin-top:40px;font-size:1.8em;text-shadow:0 0 10px #a29bfe;}
 #langSelect{margin:10px;background:#00cec9;border:none;color:#fff;padding:8px 12px;border-radius:6px;cursor:pointer;}
 #drawBtn{background:#6c5ce7;border:none;color:#fff;padding:12px 24px;border-radius:10px;cursor:pointer;font-size:16px;transition:all 0.3s;margin-top:20px;}
@@ -28,7 +27,7 @@ footer{color:#aaa;font-size:0.8em;margin-bottom:20px;}
 </head>
 <body>
 
-<h1>🔮 今日塔罗占卜 Tarot of the Day</h1>
+<h1>🔮 今日塔罗占卜 Tarot of the Day / 今日のタロット占い</h1>
 <select id="langSelect">
   <option value="zh">中文</option>
   <option value="en">English</option>
@@ -47,7 +46,7 @@ footer{color:#aaa;font-size:0.8em;margin-bottom:20px;}
 </div>
 
 <div id="fortuneBox" style="display:none;">
-  <h3>🌟 今日运势报告</h3>
+  <h3 id="fortuneTitle">🌟 今日运势报告</h3>
   <div id="fortuneText"></div>
 </div>
 
@@ -56,68 +55,83 @@ footer{color:#aaa;font-size:0.8em;margin-bottom:20px;}
 <script>
 document.addEventListener("DOMContentLoaded", async ()=>{
 const elementsColor={m:"#5e4fa2",c:"#2e86de",w:"#ff8c42",s:"#b2bec3",p:"#55efc4"};
-const btn=document.getElementById("drawBtn"),card=document.getElementById("tarotCard"),
-inner=card.querySelector(".inner"),front=document.getElementById("front"),
-cardName=document.getElementById("cardName"),meaning=document.getElementById("meaning"),
-langSelect=document.getElementById("langSelect"),fortuneBox=document.getElementById("fortuneBox"),
-fortuneText=document.getElementById("fortuneText");
+const btn=document.getElementById("drawBtn");
+const card=document.getElementById("tarotCard");
+const inner=card.querySelector(".inner");
+const front=document.getElementById("front");
+const cardName=document.getElementById("cardName");
+const meaning=document.getElementById("meaning");
+const langSelect=document.getElementById("langSelect");
+const fortuneBox=document.getElementById("fortuneBox");
+const fortuneTitle=document.getElementById("fortuneTitle");
+const fortuneText=document.getElementById("fortuneText");
 
-// 载入JSON
-let tarotDeck = [];
-await fetch("tarotDeck.json")
-  .then(res=>res.json())
-  .then(data=>{
-    tarotDeck = data;
-    // 添加小阿尔卡那
-    ["c","w","s","p"].forEach(suit=>{
-      for(let i=1;i<=14;i++){
-        tarotDeck.push({
-          id:i,suit,
-          name:{zh:`${{"c":"圣杯","w":"权杖","s":"宝剑","p":"钱币"}[suit]}${i}`,
-                en:`${{"c":"Cups","w":"Wands","s":"Swords","p":"Pentacles"}[suit]} ${i}`,
-                jp:`${{"c":"カップ","w":"ワンド","s":"ソード","p":"ペンタクル"}[suit]}の${i}`},
-          meaning:{zh:{"c":"情感与关系","w":"行动与创造","s":"思想与真理","p":"物质与事业"}[suit],
-                   en:{"c":"Emotion & relationship","w":"Action & creativity","s":"Mind & truth","p":"Material & work"}[suit],
-                   jp:{"c":"感情と関係","w":"行動と創造","s":"思考と真実","p":"物質と仕事"}[suit]}
-        });
-      }
-    });
-  })
-  .catch(err=>alert("❌ 无法加载 tarotDeck.json，请确认文件存在。"));
+let tarotDeck=[];
+await fetch("tarotDeck.json").then(r=>r.json()).then(d=>tarotDeck=d)
+.catch(()=>alert("❌ 无法加载 tarotDeck.json"));
 
 // 图片路径
-function getImgUrl(id,suit){const s=suit?suit.toLowerCase():"m";return `images/${s}${String(id).padStart(2,"0")}.jpg`;}
+function getImgUrl(id,suit){return `images/${suit.toLowerCase()}${String(id).padStart(2,"0")}.jpg`;}
 
-// 生成今日运势
+// 多语言文本
+const i18n={
+  zh:{
+    title:"🌟 今日运势报告",
+    categories:["💘 爱情","💼 事业","💪 健康"],
+    reversed:"逆位：暗示内在矛盾或阻碍，请保持冷静。",
+    upright:"正位：能量流动顺畅，代表积极前进。",
+    love:["感情上需真诚沟通","爱情有新机遇","注意误会与冷淡","浪漫能量增强"],
+    career:["工作进展顺利","适合团队合作","注意计划与耐心","有晋升机会"],
+    health:["保持规律作息","注意情绪压力","精力充沛","饮食需均衡"]
+  },
+  en:{
+    title:"🌟 Daily Fortune Report",
+    categories:["💘 Love","💼 Career","💪 Health"],
+    reversed:"Reversed: Indicates inner conflicts or obstacles — stay calm.",
+    upright:"Upright: Energy flows positively — progress is likely.",
+    love:["Be honest in love.","New romantic chance.","Avoid misunderstandings.","Emotional energy flows strongly."],
+    career:["Work goes smoothly.","Good for teamwork.","Stay patient and plan.","Opportunity for promotion."],
+    health:["Keep a regular routine.","Manage stress.","Energetic and active.","Eat balanced meals."]
+  },
+  jp:{
+    title:"🌟 今日の運勢レポート",
+    categories:["💘 恋愛","💼 仕事","💪 健康"],
+    reversed:"逆位置：内面の混乱や停滞を示します。冷静さを保って。",
+    upright:"正位置：前向きな流れと発展の兆しがあります。",
+    love:["恋愛では誠実な会話を。","新しい出会いの兆し。","誤解や冷淡に注意。","ロマンチックな気配。"],
+    career:["仕事は順調。","チームワークが吉。","計画と忍耐が大切。","昇進のチャンスあり。"],
+    health:["生活リズムを整えて。","ストレスに注意。","活力にあふれる日。","食事のバランスを取ろう。"]
+  }
+};
+
+// 随机星级
 function randomStars(){return "★".repeat(Math.floor(Math.random()*3+3));}
+
+// 运势生成
 function genFortune(card,reversed,lang){
-  const base={
-    zh:{love:["感情上需真诚沟通","爱情有新机遇","注意误会与冷淡","浪漫能量增强"],
-        career:["工作进展顺利","适合团队合作","注意计划与耐心","有晋升机会"],
-        health:["保持规律作息","注意情绪压力","精力充沛","饮食需均衡"],
-        revHint:"逆位：暗示内在矛盾或阻碍，请保持冷静。",
-        norHint:"正位：能量流动顺畅，代表积极前进。"},
-    en:{love:["Be honest in love.","New romantic chance.","Avoid misunderstandings.","Emotional energy flows strongly."],
-        career:["Work goes well.","Good for teamwork.","Stay patient.","Chance for promotion."],
-        health:["Keep a good routine.","Manage stress.","Energetic today.","Eat balanced meals."],
-        revHint:"Reversed: Blockage or confusion—stay calm.",
-        norHint:"Upright: Energy flows positively."}
-  }[lang]||base.zh;
+  const t=i18n[lang]||i18n.zh;
+  fortuneTitle.textContent=t.title;
   const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const love=`${t.categories[0]}：${pick(t.love)} <span class='stars'>${randomStars()}</span>`;
+  const career=`${t.categories[1]}：${pick(t.career)} <span class='stars'>${randomStars()}</span>`;
+  const health=`${t.categories[2]}：${pick(t.health)} <span class='stars'>${randomStars()}</span>`;
   fortuneText.innerHTML=`
-  <div class='fortune-item'>💘 爱情：${pick(base.love)} <span class='stars'>${randomStars()}</span></div>
-  <div class='fortune-item'>💼 事业：${pick(base.career)} <span class='stars'>${randomStars()}</span></div>
-  <div class='fortune-item'>💪 健康：${pick(base.health)} <span class='stars'>${randomStars()}</span></div>
+  <div class='fortune-item'>${love}</div>
+  <div class='fortune-item'>${career}</div>
+  <div class='fortune-item'>${health}</div>
   <hr style='opacity:0.3'>
   📖 <b>${card.name[lang]}</b>：${card.meaning[lang]}<br>
-  🔄 ${reversed?base.revHint:base.norHint}`;
+  🔄 ${reversed?t.reversed:t.upright}`;
   fortuneBox.style.display="block";
 }
 
-// 缓存
+// 今日缓存
 const todayKey=new Date().toISOString().slice(0,10);
 let saved=JSON.parse(localStorage.getItem("tarot_today")||"null");
-if(saved&&saved.date===todayKey){showCard(saved.card,saved.reversed,saved.lang,true);btn.textContent="今日已抽牌（点击重新查看）";}
+if(saved&&saved.date===todayKey){
+  showCard(saved.card,saved.reversed,saved.lang,true);
+  btn.textContent="今日已抽牌（点击重新查看）";
+}
 
 // 抽牌逻辑
 btn.addEventListener("click",()=>{

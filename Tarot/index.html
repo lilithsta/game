@@ -172,7 +172,7 @@ const langSelect=document.getElementById("langSelect");
 
 /* --- URL builder --- */
 function getImgUrl(id, suit) {
-  const safeSuit = (suit ? suit.toUpperCase() : "M");
+  const safeSuit = (suit ? suit.toLowerCase() : "m");
   const num = String(id).padStart(2, "0");
   return `images/${safeSuit}${num}.jpg`;
 }

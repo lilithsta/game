@@ -150,6 +150,9 @@ function genFortuneData(){
 // 渲染报告
 function renderFortune(card,reversed,lang,data){
   const t=i18n[lang]||i18n.zh;
+  console.log(lang);
+  console.log(i18n);
+  console.log(t);
   fortuneTitle.textContent=t.title;
   const parts=[
     `${t.categories[0]}：${t.love[data.love]} <span class='stars'>${"★".repeat(data.stars[0])}</span>`,

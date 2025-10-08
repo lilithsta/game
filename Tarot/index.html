@@ -5,105 +5,26 @@
 <title>今日塔罗占卜 Tarot of the Day</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body {
-  background: radial-gradient(circle at center, #1a1b2f, #0d1321);
-  color: #fff;
-  font-family: "Noto Sans SC","Noto Sans JP",sans-serif;
-  text-align: center;
-  margin: 0; padding: 0;
-  transition: background 1s ease;
-}
-h1 {
-  margin-top: 30px;
-  font-size: 1.8em;
-  text-shadow: 0 0 10px #a29bfe;
-}
-#langSelect, #drawBtn {
-  margin: 10px;
-  background: #6c5ce7;
-  border: none;
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 15px;
-}
-#drawBtn:hover { background: #a29bfe; }
-
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  gap: 25px;
-}
-
-/* 卡片区域 */
-.card-area {
-  flex: 0 0 260px;
-  display: flex;
-  justify-content: center;
-}
-.card {
-  width: 240px; height: 420px;
-  border-radius: 10px;
-  box-shadow: 0 0 20px #6c5ce7;
-  background-color: #2d3436;
-  perspective: 1000px;
-  position: relative;
-}
-.inner {
-  width: 100%; height: 100%;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-  position: relative;
-}
-.flip .inner { transform: rotateY(180deg); }
-.front,.back {
-  position: absolute;
-  width: 100%; height: 100%;
-  backface-visibility: hidden;
-  border-radius: 10px;
-}
-.front { background-size: cover; background-position: center; }
-.back {
-  transform: rotateY(180deg);
-  background: rgba(30,30,60,0.9);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-}
-#cardName { font-size: 1.2em; margin-bottom: 10px; color: #ffd86b; }
-#meaning { font-size: 0.95em; line-height: 1.4em; }
-
-/* 运势报告区域 */
-.fortune-area {
-  flex: 0 0 340px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 12px;
-  padding: 15px;
-  text-align: left;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  min-height: 420px;
-}
-.fortune-area h3 {
-  text-align: center;
-  color: #ffd86b;
-  margin-top: 0;
-}
-.fortune-item { margin: 6px 0; }
-.stars { color: #ffd700; font-size: 1.1em; }
-
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .container { flex-direction: column; align-items: center; }
-  .fortune-area { width: 90%; min-height: auto; }
-}
-
-footer { color:#aaa;font-size:0.8em;margin:30px 0; }
+body{background:radial-gradient(circle at center,#1a1b2f,#0d1321);color:#fff;font-family:"Noto Sans SC","Noto Sans JP",sans-serif;text-align:center;margin:0;padding:0;transition:background 1s ease;}
+h1{margin-top:30px;font-size:1.8em;text-shadow:0 0 10px #a29bfe;}
+#langSelect,#drawBtn{margin:10px;background:#6c5ce7;border:none;color:#fff;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:15px;}
+#drawBtn:hover{background:#a29bfe;}
+.container{display:flex;justify-content:center;align-items:flex-start;flex-wrap:wrap;margin-top:20px;gap:25px;}
+.card-area{flex:0 0 260px;display:flex;justify-content:center;}
+.card{width:240px;height:420px;border-radius:10px;box-shadow:0 0 20px #6c5ce7;background-color:#2d3436;perspective:1000px;position:relative;}
+.inner{width:100%;height:100%;transition:transform 0.8s;transform-style:preserve-3d;position:relative;}
+.flip .inner{transform:rotateY(180deg);}
+.front,.back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;}
+.front{background-size:cover;background-position:center;}
+.back{transform:rotateY(180deg);background:rgba(30,30,60,0.9);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:15px;}
+#cardName{font-size:1.2em;margin-bottom:10px;color:#ffd86b;}
+#meaning{font-size:0.95em;line-height:1.4em;}
+.fortune-area{flex:0 0 340px;background:rgba(255,255,255,0.08);border-radius:12px;padding:15px;text-align:left;box-shadow:0 0 10px rgba(0,0,0,0.3);min-height:420px;}
+.fortune-area h3{text-align:center;color:#ffd86b;margin-top:0;}
+.fortune-item{margin:6px 0;}
+.stars{color:#ffd700;font-size:1.1em;}
+@media(max-width:768px){.container{flex-direction:column;align-items:center;}.fortune-area{width:90%;min-height:auto;}}
+footer{color:#aaa;font-size:0.8em;margin:30px 0;}
 </style>
 </head>
 <body>
@@ -150,9 +71,9 @@ let tarotDeck=[];
 await fetch("tarotDeck.json").then(r=>r.json()).then(d=>tarotDeck=d)
 .catch(()=>alert("❌ 无法加载 tarotDeck.json"));
 
-// 安全图片路径
-function getImgUrl(id, suit){
-  if(!suit){ console.warn("⚠️ suit undefined:",id); return "images/default.jpg"; }
+// 图片路径
+function getImgUrl(id,suit){
+  if(!suit){console.warn("⚠️ suit undefined:",id);return "images/default.jpg";}
   return `images/${String(suit).toLowerCase()}${String(id).padStart(2,"0")}.jpg`;
 }
 
@@ -178,33 +99,37 @@ const i18n={
       health:["生活リズムを整えて。","ストレスに注意。","活力にあふれる日。","食事のバランスを取ろう。"]}
 };
 
-// 随机星级
-function randomStars(){return "★".repeat(Math.floor(Math.random()*3+3));}
+// 生成固定运势结果（返回索引+星数）
+function genFortuneData(){
+  return {
+    love: Math.floor(Math.random()*4),
+    career: Math.floor(Math.random()*4),
+    health: Math.floor(Math.random()*4),
+    stars: [Math.floor(Math.random()*3+3), Math.floor(Math.random()*3+3), Math.floor(Math.random()*3+3)]
+  };
+}
 
-// 生成运势，可返回HTML
-function genFortune(card,reversed,lang,returnHTMLOnly=false){
+// 渲染运势报告
+function renderFortune(card,reversed,lang,data){
   const t=i18n[lang]||i18n.zh;
   fortuneTitle.textContent=t.title;
-  const pick=a=>a[Math.floor(Math.random()*a.length)];
-  const sections=[
-    `${t.categories[0]}：${pick(t.love)} <span class='stars'>${randomStars()}</span>`,
-    `${t.categories[1]}：${pick(t.career)} <span class='stars'>${randomStars()}</span>`,
-    `${t.categories[2]}：${pick(t.health)} <span class='stars'>${randomStars()}</span>`
+  const parts=[
+    `${t.categories[0]}：${t.love[data.love]} <span class='stars'>${"★".repeat(data.stars[0])}</span>`,
+    `${t.categories[1]}：${t.career[data.career]} <span class='stars'>${"★".repeat(data.stars[1])}</span>`,
+    `${t.categories[2]}：${t.health[data.health]} <span class='stars'>${"★".repeat(data.stars[2])}</span>`
   ].map(s=>`<div class='fortune-item'>${s}</div>`).join("");
-  const html=sections+
-    `<hr style='opacity:0.3'>
-    📖 <b>${card.name[lang]}</b>：${card.meaning[lang]}<br>
-    🔄 ${reversed?t.reversed:t.upright}`;
-  if(returnHTMLOnly) return html;
-  fortuneText.innerHTML=html;
+  fortuneText.innerHTML=parts+
+  `<hr style='opacity:0.3'>
+   📖 <b>${card.name[lang]}</b>：${card.meaning[lang]}<br>
+   🔄 ${reversed?t.reversed:t.upright}`;
   fortuneBox.style.display="block";
 }
 
-// 今日缓存检查
+// 今日缓存
 const todayKey=new Date().toISOString().slice(0,10);
 let saved=JSON.parse(localStorage.getItem("tarot_today")||"null");
 if(saved&&saved.date===todayKey){
-  showCard(saved.card,saved.reversed,saved.lang,true);
+  showCard(saved.card,saved.reversed,saved.lang,saved.fortuneData,true);
   btn.textContent="今日已抽牌（点击重新查看）";
 }
 
@@ -212,16 +137,19 @@ if(saved&&saved.date===todayKey){
 btn.addEventListener("click",()=>{
   const lang=langSelect.value;
   const stored=JSON.parse(localStorage.getItem("tarot_today")||"null");
-  if(stored&&stored.date===todayKey){showCard(stored.card,stored.reversed,stored.lang,true);return;}
+  if(stored&&stored.date===todayKey){
+    showCard(stored.card,stored.reversed,lang,stored.fortuneData,true);
+    return;
+  }
   const card=tarotDeck[Math.floor(Math.random()*tarotDeck.length)];
   const reversed=Math.random()<0.5;
-  const fortuneHTML=genFortune(card,reversed,lang,true);
-  localStorage.setItem("tarot_today",JSON.stringify({date:todayKey,card,reversed,lang,fortuneHTML}));
-  showCard(card,reversed,lang,false);
+  const fortuneData=genFortuneData();
+  localStorage.setItem("tarot_today",JSON.stringify({date:todayKey,card,reversed,lang,fortuneData}));
+  showCard(card,reversed,lang,fortuneData,false);
 });
 
 // 显示卡片
-function showCard(card,reversed,lang,isCached){
+function showCard(card,reversed,lang,fortuneData,isCached){
   const img=getImgUrl(card.id,card.suit);
   front.style.backgroundImage=`url('${img}')`;
   front.style.transform=reversed?"rotate(180deg)":"rotate(0)";
@@ -229,18 +157,17 @@ function showCard(card,reversed,lang,isCached){
   meaning.textContent=(reversed?"【逆位含义】":"【正位含义】")+" "+card.meaning[lang];
   document.body.style.background=`radial-gradient(circle at center, ${elementsColor[card.suit]||"#6c5ce7"}, #0d1321)`;
   inner.classList.add("flip");
-
-  if(isCached){
-    const stored=JSON.parse(localStorage.getItem("tarot_today"));
-    if(stored&&stored.fortuneHTML){
-      fortuneText.innerHTML=stored.fortuneHTML;
-      fortuneTitle.textContent=i18n[stored.lang]?.title||i18n.zh.title;
-      fortuneBox.style.display="block";
-      return;
-    }
-  }
-  genFortune(card,reversed,lang);
+  renderFortune(card,reversed,lang,fortuneData);
 }
+
+// 🌐 切换语言时刷新报告
+langSelect.addEventListener("change",()=>{
+  const lang=langSelect.value;
+  const stored=JSON.parse(localStorage.getItem("tarot_today")||"null");
+  if(stored&&stored.date===todayKey){
+    showCard(stored.card,stored.reversed,lang,stored.fortuneData,true);
+  }
+});
 });
 </script>
 </body>

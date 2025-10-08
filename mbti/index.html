@@ -1,395 +1,376 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>戀愛版 MBTI 測試</title>
+  <title>恋爱版 MBTI 测试 | Love MBTI Test | 恋愛版MBTI</title>
   <style>
     :root{
-      --bg:#0f172a; /* slate-900 */
-      --card:#111827ee; /* gray-900 */
-      --muted:#94a3b8; /* slate-400 */
-      --text:#e5e7eb; /* gray-200 */
-      --accent:#22d3ee; /* cyan-400 */
-      --accent2:#a78bfa; /* violet-400 */
-      --ok:#34d399; /* emerald-400 */
-      --warn:#fb7185; /* rose-400 */
+      --bg:#0f172a;--panel:#1e293b;--text:#e5e7eb;--muted:#94a3b8;--accent:#22d3ee;--accent2:#a78bfa
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      background: radial-gradient(1200px 800px at 70% -10%, #1e293b 0%, var(--bg) 60%), linear-gradient(180deg, #0b1020, #0f172a);
-      color:var(--text);
-      display:flex; align-items:center; justify-content:center;
-    }
-    .app{ width:min(100%, 980px); padding:24px; }
-    .card{ background:var(--card); backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,.06); border-radius:20px; overflow:hidden; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
-    header{ padding:22px 24px; border-bottom:1px solid rgba(255,255,255,.06); display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap}
-    h1{ font-size:clamp(20px, 3vw, 28px); margin:0; letter-spacing:.4px }
-    .badges{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
-    .badge{ font-size:12px; color:#0b1220; background:linear-gradient(120deg, var(--accent), var(--accent2)); padding:6px 10px; border-radius:999px; }
-    .content{ padding:20px }
-    .row{ display:grid; grid-template-columns: 1.1fr .9fr; gap:18px }
-    @media (max-width:900px){ .row{ grid-template-columns:1fr } }
-    .panel{ background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.06); border-radius:16px; padding:18px }
-    .intro p{ color:var(--muted); margin:8px 0 0 }
-    .controls{ display:flex; gap:10px; flex-wrap:wrap }
-    button, .linkbtn{
-      background:linear-gradient(120deg, rgba(34,211,238,.12), rgba(167,139,250,.12));
-      color:var(--text); border:1px solid rgba(255,255,255,.12); border-radius:12px;
-      padding:10px 14px; cursor:pointer; font-weight:600;
-    }
-    button:hover, .linkbtn:hover{ border-color: rgba(255,255,255,.24) }
-    button.ghost{ background:transparent }
-    .progress{ height:8px; background:#0b1220; border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.08); }
-    .progress>div{ height:100%; background:linear-gradient(90deg, var(--accent), var(--accent2)); width:0% }
-    .q{ margin:14px 0; padding:14px; border:1px solid rgba(255,255,255,.08); border-radius:14px; background:rgba(0,0,0,.16) }
-    .q h3{ margin:0 0 8px; font-size:16px }
-    .opt{ display:flex; gap:10px; margin-top:8px; flex-wrap:wrap }
-    .opt label{ display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.04); padding:10px 12px; border-radius:10px; cursor:pointer; border:1px solid rgba(255,255,255,.06) }
-    .opt input{ width:16px; height:16px }
-    .muted{ color:var(--muted); font-size:13px }
-    .typebox{ display:grid; grid-template-columns: 1fr 1fr; gap:10px }
-    .pill{ border:1px dashed rgba(255,255,255,.16); padding:6px 10px; border-radius:999px; text-align:center; font-size:13px }
-    .bigtype{ font-size:40px; font-weight:900; letter-spacing:2px; text-align:center; margin:10px 0 }
-    .result-card{ border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:14px; background:rgba(255,255,255,.03) }
-    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px }
-    @media (max-width:720px){ .grid{ grid-template-columns:1fr } }
-    .kvs{ display:grid; grid-template-columns: .9fr 1.1fr; gap:8px; align-items:center }
-    .kv{ padding:10px; border:1px solid rgba(255,255,255,.08); border-radius:12px }
-    .hint{ font-size:12px; color:var(--muted) }
-    footer{ padding:12px 18px; border-top:1px solid rgba(255,255,255,.06); display:flex; gap:10px; justify-content:space-between; flex-wrap:wrap }
-    .toast{ position:fixed; right:16px; bottom:16px; padding:10px 14px; border-radius:10px; background:#101826; border:1px solid rgba(255,255,255,.1); display:none }
-    a.inline{ color:var(--accent) }
+    body{margin:0;background:radial-gradient(900px 600px at 70% -10%,#1e293b 0%,#0f172a 60%),linear-gradient(180deg,#0b1020,#0f172a);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Noto Sans,Helvetica,Arial}
+    .container{max-width:980px;margin:24px auto;padding:16px}
+    .card{background:var(--panel);border:1px solid rgba(255,255,255,.08);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.35);overflow:hidden}
+    header,footer{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+    footer{border-top:1px solid rgba(255,255,255,.08);border-bottom:none;color:var(--muted)}
+    h1{margin:0;font-size:clamp(20px,3vw,28px)}
+    .content{padding:16px}
+    .row{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+    @media (max-width:900px){.row{grid-template-columns:1fr}}
+    .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px}
+    .lang{display:flex;gap:8px;flex-wrap:wrap}
+    button{border-radius:12px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(120deg,rgba(34,211,238,.15),rgba(167,139,250,.15));color:var(--text);padding:8px 12px;font-weight:600;cursor:pointer}
+    button.ghost{background:transparent}
+    .progress{height:8px;background:#0b1220;border:1px solid rgba(255,255,255,.1);border-radius:999px;overflow:hidden}
+    .progress>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
+    .q{padding:10px;border:1px solid rgba(255,255,255,.08);border-radius:12px;margin:10px 0;background:rgba(0,0,0,.12)}
+    .q h3{margin:0 0 8px;font-size:16px}
+    .opts{display:flex;gap:10px;flex-wrap:wrap}
+    .opts label{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.04);cursor:pointer}
+    .muted{color:var(--muted);font-size:13px}
+    .result{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:720px){.result{grid-template-columns:1fr}}
+    .animal{font-size:64px;line-height:1}
+    .pill{border:1px dashed rgba(255,255,255,.18);border-radius:999px;padding:6px 10px;display:inline-block;margin:4px;font-size:13px}
   </style>
 </head>
 <body>
-  <div class="app">
+  <div class="container">
     <div class="card" id="app">
       <header>
-        <h1>💘 戀愛版 MBTI 測試</h1>
-        <div class="badges">
-          <span class="badge">立即作答 ~ 3-5 分鐘</span>
-          <span class="badge">無需登入</span>
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+          <h1 id="title">恋爱版 MBTI 测试</h1>
+          <div class="lang">
+            <button id="btnZH">中文</button>
+            <button id="btnJA">日本語</button>
+            <button id="btnEN">English</button>
+          </div>
         </div>
       </header>
-
       <div class="content">
         <div class="row">
-          <section class="panel intro">
-            <h2 style="margin:0">這是什麼？</h2>
-            <p>根據 4 個維度（外向/內向、感覺/直覺、思考/情感、判斷/知覺）推測你的戀愛傾向，生成 16 型人格（如 ENFP、ISTJ）。僅供娛樂參考～</p>
-            <div class="controls" style="margin-top:10px">
-              <button id="startBtn">開始測試</button>
-              <button class="ghost" id="loadBtn">載入上次結果</button>
-              <button class="ghost" id="shareBtn">分享本頁</button>
-            </div>
-            <div class="muted" id="hashInfo"></div>
-          </section>
-
           <section class="panel">
-            <div class="progress" aria-label="作答進度"><div id="bar"></div></div>
+            <div class="muted" id="intro">基于四维度（外向/内向、感觉/直觉、思考/情感、判断/知觉）推测你的恋爱倾向，仅供娱乐。</div>
+            <div class="progress" style="margin:10px 0"><div id="bar"></div></div>
             <div id="quiz"></div>
-            <div class="controls" style="justify-content:space-between">
+            <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:6px">
               <div>
-                <button id="prevBtn" disabled>上一步</button>
-                <button id="nextBtn" disabled>下一步</button>
-              </div>
-              <button id="submitBtn" disabled>查看結果</button>
-            </div>
-          </section>
-        </div>
-
-        <div class="grid" style="margin-top:14px">
-          <section class="result-card" id="result" hidden>
-            <div class="kvs">
-              <div class="kv">
-                <div class="muted">你的類型</div>
-                <div class="bigtype" id="typeText">----</div>
-                <div class="typebox" id="letters"></div>
-              </div>
-              <div class="kv">
-                <div class="muted">戀愛標籤</div>
-                <div class="typebox" id="tags"></div>
-              </div>
-            </div>
-            <div style="margin-top:10px" id="desc"></div>
-
-            <div class="panel" style="margin-top:12px">
-              <h3 style="margin:0 0 8px">適配&互補</h3>
-              <div class="muted">根據典型互補/同頻理論生成，僅供參考。</div>
-              <div id="matches" style="margin-top:8px" class="typebox"></div>
-            </div>
-
-            <div class="controls" style="margin-top:12px; justify-content:space-between">
-              <div>
-                <button id="againBtn">再測一次</button>
+                <button id="prev" disabled>上一步</button>
+                <button id="next" disabled>下一步</button>
               </div>
               <div>
-                <button id="copyLinkBtn">複製結果連結</button>
-                <button id="saveBtn">儲存到本機</button>
+                <button id="submit" disabled>查看结果</button>
               </div>
             </div>
           </section>
-
-          <section class="result-card">
-            <h3 style="margin:0 0 8px">關於分數</h3>
-            <p class="hint">每題 2 選 1。系統對 4 條維度分別累計：E↔I、S↔N、T↔F、J↔P。正向靠左、負向靠右。若接近 0，代表該維度較平衡。</p>
-            <div id="bars"></div>
+          <section class="panel">
+            <div id="resultBox" hidden>
+              <div class="muted" id="yourTypeLabel">你的类型</div>
+              <div style="display:flex;align-items:center;gap:12px;margin:6px 0">
+                <div class="animal" id="animal">🦊</div>
+                <div>
+                  <div style="font-weight:800;font-size:24px" id="typeName">ENFP · 热情浪漫狐狸</div>
+                  <div class="muted" id="typeTags"></div>
+                </div>
+              </div>
+              <div id="typeDesc" style="margin:8px 0"></div>
+              <div id="matchBox" class="panel" style="margin-top:10px">
+                <div class="muted" id="compatLabel">适配 & 互补（参考）</div>
+                <div id="matches" style="margin-top:6px"></div>
+              </div>
+              <div class="panel" style="margin-top:10px">
+                <div class="muted" id="scoreLabel">维度得分</div>
+                <div id="bars"></div>
+              </div>
+            </div>
+            <div id="placeholder" class="muted">完成答题后，这里会显示你的拟人化动物画像与配对建议。</div>
           </section>
         </div>
       </div>
-
       <footer>
-        <div class="muted">© 2025 戀愛版 MBTI • 由純前端實作（可離線使用）</div>
-        <div class="muted">改題、改配色或加入多語？歡迎在程式裡調整 <code>QUESTIONS</code> 與 <code>TYPE_INFO</code>。</div>
+        <div id="foot">© 2025 • 纯前端实现，可离线使用。你可在代码中自定义题库与文案。</div>
       </footer>
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
-
 <script>
-// ====== 題庫：每題對應一個維度方向 ======
-const QUESTIONS = [
-  { id:1, dim:"EI", q:"初次約會，你會：", a:[{t:"主動安排行程並帶動氣氛", v:+1},{t:"安靜觀察對方、慢熱漸進", v:-1}]},
-  { id:2, dim:"SN", q:"聊天話題偏好：", a:[{t:"具體生活與可落地計畫", v:+1},{t:"腦洞靈感與未來想像", v:-1}]},
-  { id:3, dim:"TF", q:"面對衝突，你：", a:[{t:"就事論事、先談邏輯與原則", v:+1},{t:"先顧情緒、強調感受與關係", v:-1}]},
-  { id:4, dim:"JP", q:"告白時機：", a:[{t:"規劃到位、選擇合適節點", v:+1},{t:"順勢而為、感覺到了就說", v:-1}]},
-  { id:5, dim:"EI", q:"週末相處，你傾向：", a:[{t:"一起參加朋友聚會或戶外活動", v:+1},{t:"兩人世界窩家裡或小而美", v:-1}]},
-  { id:6, dim:"SN", q:"紀念日禮物更在意：", a:[{t:"實用耐看、值得長期使用", v:+1},{t:"有故事的、象徵性的驚喜", v:-1}]},
-  { id:7, dim:"TF", q:"TA 因工作煩躁時你：", a:[{t:"協助分析問題並給方案", v:+1},{t:"陪伴傾聽與情緒支持", v:-1}]},
-  { id:8, dim:"JP", q:"旅行風格：", a:[{t:"行程表到小時、預定完善", v:+1},{t:"說走就走、現場依心情調整", v:-1}]},
-  { id:9, dim:"EI", q:"認識新朋友：", a:[{t:"很快打成一片、社牛加成", v:+1},{t:"慢慢熟悉、質量重於數量", v:-1}]},
-  { id:10, dim:"SN", q:"戀愛中的安全感源自：", a:[{t:"明確承諾與可見投入", v:+1},{t:"彼此靈魂頻率與默契", v:-1}]},
-  { id:11, dim:"TF", q:"送對方禮物時你會：", a:[{t:"研究需求與性價比", v:+1},{t:"觀察TA喜好、打造專屬感", v:-1}]},
-  { id:12, dim:"JP", q:"家務分工：", a:[{t:"明確規則與固定節奏", v:+1},{t:"隨機輪流、看當天狀態", v:-1}]},
-  { id:13, dim:"EI", q:"感情出問題時：", a:[{t:"拉到檯面上討論與協調", v:+1},{t:"先自我消化、找時機再聊", v:-1}]},
-  { id:14, dim:"SN", q:"第一次見家長：", a:[{t:"注重細節與流程、按部就班", v:+1},{t:"相信自然互動、重視氛圍", v:-1}]},
-  { id:15, dim:"TF", q:"對另一半的期待：", a:[{t:"能力可靠、做事有效率", v:+1},{t:"體貼溫暖、情緒穩定", v:-1}]},
-  { id:16, dim:"JP", q:"訂結婚計畫：", a:[{t:"時間線/預算表先出來", v:+1},{t:"看緣分、邊走邊定", v:-1}]},
+// ===== 配置：问题（顺序一致），每题指向一个维度 =====
+const QUESTIONS_META = [
+  {dim:'EI'},{dim:'SN'},{dim:'TF'},{dim:'JP'},
+  {dim:'EI'},{dim:'SN'},{dim:'TF'},{dim:'JP'},
+  {dim:'EI'},{dim:'SN'},{dim:'TF'},{dim:'JP'},
+  {dim:'EI'},{dim:'SN'},{dim:'TF'},{dim:'JP'},
 ];
 
-// ====== 16 型描述與標籤 ======
-const TYPE_INFO = {
-  ENFJ:{ name:"溫暖領隊", tags:["共情高手","主動給安全感","重視承諾"], love:"擅長建立長期關係，會主動規劃並照顧對方感受。", match:["INFP","ISFP","INTP"] },
-  ENFP:{ name:"靈感冒險家", tags:["高熱情","驚喜製造機","重視浪漫"], love:"情感表達豐富，喜歡新鮮與連結，期盼被理解與共同成長。", match:["INFJ","INTJ","ISFJ"] },
-  ENTJ:{ name:"行動派指揮", tags:["目標導向","效率至上","可靠"], love:"在關係中會主動設定方向與節奏，但也需要彼此尊重。", match:["INFP","ISFP","ENFP"] },
-  ENTP:{ name:"腦洞玩家", tags:["辯思狂熱","創新互動","不喜無聊"], love:"需要思想火花與自由空間，欣賞好奇、能對話的伴侶。", match:["INFJ","ISFJ","INTJ"] },
-  ESFJ:{ name:"貼心管家", tags:["體貼周到","關係維護","務實"], love:"注重儀式感與穩定經營，渴望被肯定與互相關懷。", match:["ISFP","INFP","ESFP"] },
-  ESFP:{ name:"現場派快樂", tags:["氛圍王","熱情即時","社交能量"], love:"在相處中注重快樂體驗與陪伴，偏愛自然真誠。", match:["ISFJ","ISTJ","ENFJ"] },
-  ESTJ:{ name:"務實領班", tags:["有原則","可靠穩定","重承諾"], love:"講究分工和計畫，給足安全感；希望彼此守規則。", match:["ISFP","INFP","ESFP"] },
-  ESTP:{ name:"行動現實家", tags:["果斷直接","愛挑戰","臨場感強"], love:"偏愛直接溝通與共同體驗，不拖泥帶水。", match:["ISFJ","INFJ","ESFJ"] },
-  INFJ:{ name:"洞察引導者", tags:["深度連結","理想主義","溫柔堅定"], love:"渴望靈魂契合，願意長期投入與共創價值。", match:["ENFP","ENTP","ISFP"] },
-  INFP:{ name:"理想戀人", tags:["浪漫純粹","感性細膩","重價值觀"], love:"看重價值一致與被理解，會因愛成長。", match:["ENFJ","ENTJ","ESFJ"] },
-  INTJ:{ name:"戰略伴侶", tags:["深謀遠慮","邏輯清晰","重效率"], love:"偏好理性互動與長線規劃，需要尊重邊界。", match:["ENFP","ENFJ","ESFP"] },
-  INTP:{ name:"思辨合夥人", tags:["理性探究","需要空間","真誠"], love:"重視思想交流與真實，不擅表面社交。", match:["ENFJ","ESFJ","ISFJ"] },
-  ISFJ:{ name:"溫柔守護", tags:["細膩務實","重承諾","穩定溫暖"], love:"在日常中默默付出，期待被看見與珍惜。", match:["ENFP","ESFP","ENTP"] },
-  ISFP:{ name:"感性藝術家", tags:["自由感","體驗派","真誠"], love:"喜歡自然相處與彼此尊重，排斥過度控制。", match:["ENFJ","ESTJ","ESFJ"] },
-  ISTJ:{ name:"可靠實幹家", tags:["有秩序","守承諾","重細節"], love:"重視責任與穩定，愛在細節與行動中。", match:["ENFP","ESFP","INFP"] },
-  ISTP:{ name:"冷靜實作派", tags:["獨立","行動導向","不黏人"], love:"尊重彼此空間與務實互動，少廢話多做事。", match:["ENFJ","ESFJ","INFJ"] },
+// ===== 多语言文本 =====
+const TEXTS = {
+  zh:{
+    title:'恋爱版 MBTI 测试',
+    intro:'基于四维度（外向/内向、感觉/直觉、思考/情感、判断/知觉）推测你的恋爱倾向，仅供娱乐。',
+    btnPrev:'上一步',btnNext:'下一步',btnSubmit:'查看结果',
+    yourType:'你的类型',compat:'适配 & 互补（参考）',score:'维度得分',
+    questions:[
+      {q:'初次约会，你会：',a:['主导气氛','慢热观察']},
+      {q:'聊天更喜欢：',a:['具体话题','抽象想法']},
+      {q:'遇到矛盾更看重：',a:['原则与逻辑','感受与关系']},
+      {q:'安排约会更倾向：',a:['提前计划','随心随性']},
+      {q:'周末相处更想：',a:['一起社交或出游','二人世界宅家']},
+      {q:'纪念日礼物偏好：',a:['实用耐看','富有象征']},
+      {q:'对方低落时你：',a:['帮分析给方案','先陪伴与安慰']},
+      {q:'旅行风格：',a:['行程表完善','说走就走']},
+      {q:'认识新朋友：',a:['很快打成一片','慢慢熟悉']},
+      {q:'安全感来源：',a:['明确承诺','默契频率']},
+      {q:'送礼方式：',a:['研究需求性价比','打造专属仪式感']},
+      {q:'家务分工：',a:['明确规则','随机轮换']},
+      {q:'感情出问题时：',a:['直接讨论协调','先自我消化']},
+      {q:'第一次见家长：',a:['按部就班看细节','重视氛围自然聊']},
+      {q:'对另一半期待：',a:['能力可靠','体贴温暖']},
+      {q:'婚礼计划：',a:['时间线/预算先行','边走边定看缘分']},
+    ],
+    animals: getAnimalsZH(),
+  },
+  ja:{
+    title:'恋愛版MBTIテスト',
+    intro:'4つの軸（外向/内向・感覚/直観・思考/感情・判断/知覚）から恋愛傾向を推測します。',
+    btnPrev:'前へ',btnNext:'次へ',btnSubmit:'結果を見る',
+    yourType:'あなたのタイプ',compat:'相性 & 補完（参考）',score:'指標スコア',
+    questions:[
+      {q:'初デートでは？',a:['リードして盛り上げる','様子を見て丁寧に進む']},
+      {q:'会話の好み：',a:['具体・実用','アイデア・未来']},
+      {q:'衝突時に重視：',a:['論理と原則','気持ちと関係']},
+      {q:'デートの組み立て：',a:['事前に計画','流れに任せる']},
+      {q:'週末の過ごし方：',a:['友人と活動','2人でまったり']},
+      {q:'記念日の贈り物：',a:['実用的','象徴的・サプライズ']},
+      {q:'相手が落ち込む時：',a:['分析と提案','寄り添い共感']},
+      {q:'旅行スタイル：',a:['綿密な行程表','行き当たりばったり']},
+      {q:'新しい出会い：',a:['すぐに打ち解ける','ゆっくり距離を縮める']},
+      {q:'安心感の源：',a:['明確な約束','波長と空気感']},
+      {q:'プレゼント選び：',a:['ニーズとコスパ','相手専用の特別感']},
+      {q:'家事分担：',a:['ルールを明確に','状況で臨機応変']},
+      {q:'関係が不調の時：',a:['率直に話し合う','自分の中で整理する']},
+      {q:'初めての挨拶：',a:['段取りとマナー重視','自然体で雰囲気重視']},
+      {q:'相手への期待：',a:['有能で信頼できる','思いやりがある']},
+      {q:'結婚計画：',a:['スケジュール/予算先行','流れで決める']},
+    ],
+    animals: getAnimalsJA(),
+  },
+  en:{
+    title:'Love MBTI Test',
+    intro:'A playful take on MBTI in love across four axes (E/I, S/N, T/F, J/P). For entertainment only.',
+    btnPrev:'Back',btnNext:'Next',btnSubmit:'See Result',
+    yourType:'Your Type',compat:'Matches & Complements (for fun)',score:'Dimension Scores',
+    questions:[
+      {q:'On a first date you would:',a:['Lead and set the vibe','Observe and warm up slowly']},
+      {q:'Your chat preference:',a:['Concrete, practical','Ideas and future talk']},
+      {q:'In conflict you value:',a:['Logic & principles','Feelings & relationship']},
+      {q:'Planning a date:',a:['Plan ahead','Go with the flow']},
+      {q:'Weekend together:',a:['Social/outdoor','Cozy time for two']},
+      {q:'Anniversary gifts:',a:['Useful & lasting','Symbolic & surprising']},
+      {q:'When they’re stressed:',a:['Analyze and propose','Listen and comfort']},
+      {q:'Travel style:',a:['Detailed itinerary','Spontaneous trip']},
+      {q:'Meeting new people:',a:['Quickly connect','Slowly open up']},
+      {q:'Sense of security:',a:['Clear commitment','Shared wavelength']},
+      {q:'Gift approach:',a:['Needs & value','Personal touch'],},
+      {q:'Housework split:',a:['Clear rules','Flexible rotation']},
+      {q:'When issues arise:',a:['Talk it out directly','Process then discuss']},
+      {q:'Meet the parents:',a:['Plan & etiquette','Natural atmosphere']},
+      {q:'Expectations for partner:',a:['Competent & reliable','Caring & warm']},
+      {q:'Wedding plan:',a:['Timeline/budget first','Decide along the way']},
+    ],
+    animals: getAnimalsEN(),
+  }
 };
 
-// ====== 狀態 ======
-const state = {
-  page: 0, // 每頁 2 題
-  perPage: 2,
-  answers: {},
-  score: {EI:0, SN:0, TF:0, JP:0},
-};
-
-// ====== 元素 ======
-const quizEl = document.getElementById('quiz');
-const barEl = document.getElementById('bar');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const submitBtn = document.getElementById('submitBtn');
-const startBtn = document.getElementById('startBtn');
-const againBtn = document.getElementById('againBtn');
-const resultEl = document.getElementById('result');
-const typeText = document.getElementById('typeText');
-const lettersEl = document.getElementById('letters');
-const tagsEl = document.getElementById('tags');
-const descEl = document.getElementById('desc');
-const matchesEl = document.getElementById('matches');
-const barsEl = document.getElementById('bars');
-const toast = document.getElementById('toast');
-const saveBtn = document.getElementById('saveBtn');
-const loadBtn = document.getElementById('loadBtn');
-const copyLinkBtn = document.getElementById('copyLinkBtn');
-const shareBtn = document.getElementById('shareBtn');
-const hashInfo = document.getElementById('hashInfo');
-
-function showToast(msg){
-  toast.textContent = msg; toast.style.display='block';
-  setTimeout(()=> toast.style.display='none', 2200);
+function getAnimalsZH(){
+  return {
+    ENFJ:{emo:'🕊️',name:'温暖领队·鸽',desc:'善于照顾他人感受与节奏，给足安全感，也盼彼此成就。',tags:['共情','承诺','长期'],match:['INFP','ISFP','INTP']},
+    ENFP:{emo:'🦊',name:'灵感冒险家·狐',desc:'热情外向、点子不断，恋爱里追求心动与共同成长。',tags:['浪漫','新鲜','真诚'],match:['INFJ','INTJ','ISFJ']},
+    ENTJ:{emo:'🦅',name:'行动指挥官·鹰',desc:'目标清晰、执行果断，期待彼此独立又并肩前行。',tags:['效率','可靠','边界'],match:['INFP','ISFP','ENFP']},
+    ENTP:{emo:'🐬',name:'脑洞玩家·海豚',desc:'机智好辩爱新知，需要思想火花与自由空间。',tags:['创意','对话','自由'],match:['INFJ','ISFJ','INTJ']},
+    ESFJ:{emo:'🐼',name:'贴心管家·熊猫',desc:'体贴周到、擅经营关系，注重仪式感与稳定。',tags:['体贴','稳定','务实'],match:['ISFP','INFP','ESFP']},
+    ESFP:{emo:'🦁',name:'现场派快乐·狮',desc:'氛围高手，重视当下陪伴与快乐体验。',tags:['热情','陪伴','体验'],match:['ISFJ','ISTJ','ENFJ']},
+    ESTJ:{emo:'🦬',name:'务实领班·野牛',desc:'守原则、重承诺，给足安全感但也注重规则。',tags:['原则','责任','稳定'],match:['ISFP','INFP','ESFP']},
+    ESTP:{emo:'🐯',name:'行动现实家·虎',desc:'直接果断，偏好一起挑战与高效沟通。',tags:['果断','挑战','直接'],match:['ISFJ','INFJ','ESFJ']},
+    INFJ:{emo:'🦉',name:'洞察引导师·鸮',desc:'渴望深度连结与共同愿景，温柔而坚定。',tags:['洞察','理想','温柔'],match:['ENFP','ENTP','ISFP']},
+    INFP:{emo:'🦥',name:'理想恋人·树懒',desc:'重价值与被理解，愿因爱而成长。',tags:['浪漫','纯粹','共情'],match:['ENFJ','ENTJ','ESFJ']},
+    INTJ:{emo:'🐺',name:'战略伴侣·狼',desc:'理性克制、长线规划，需要被尊重边界与效率。',tags:['策略','独立','效率'],match:['ENFP','ENFJ','ESFP']},
+    INTP:{emo:'🦝',name:'思辨合伙人·浣熊',desc:'爱研究与真诚对话，不爱表面社交。',tags:['理性','好奇','真实'],match:['ENFJ','ESFJ','ISFJ']},
+    ISFJ:{emo:'🦌',name:'温柔守护·鹿',desc:'细腻务实，在日常里默默用心。',tags:['体贴','务实','守护'],match:['ENFP','ESFP','ENTP']},
+    ISFP:{emo:'🕊️',name:'感性艺术家·鸽',desc:'追求自由与真诚，反感过度控制。',tags:['自由','体验','真诚'],match:['ENFJ','ESTJ','ESFJ']},
+    ISTJ:{emo:'🐻',name:'可靠实干家·熊',desc:'有秩序、守承诺，用行动表达爱。',tags:['秩序','责任','细节'],match:['ENFP','ESFP','INFP']},
+    ISTP:{emo:'🦫',name:'冷静实作派·海狸',desc:'独立专注，少说多做，尊重彼此空间。',tags:['独立','行动','空间'],match:['ENFJ','ESFJ','INFJ']},
+  };
+}
+function getAnimalsJA(){
+  return {
+    ENFJ:{emo:'🕊️',name:'温かなリーダー・ハト',desc:'相手の気持ちとペースを大切にし、安心感を与えるタイプ。',tags:['共感','約束','長期'],match:['INFP','ISFP','INTP']},
+    ENFP:{emo:'🦊',name:'インスピレーション冒険家・キツネ',desc:'情熱的で好奇心旺盛。恋で心のときめきと成長を求める。',tags:['ロマン','新鮮','誠実'],match:['INFJ','INTJ','ISFJ']},
+    ENTJ:{emo:'🦅',name:'行動司令官・ワシ',desc:'目標明確・実行力抜群。自立と協働のバランスを重視。',tags:['効率','信頼','境界'],match:['INFP','ISFP','ENFP']},
+    ENTP:{emo:'🐬',name:'ブレスト使い・イルカ',desc:'機知に富み議論好き。自由さと知的な火花が必要。',tags:['創造','対話','自由'],match:['INFJ','ISFJ','INTJ']},
+    ESFJ:{emo:'🐼',name:'気配りマスター・パンダ',desc:'面倒見がよく関係を大切にする。儀式感と安定を重視。',tags:['思いやり','安定','実用'],match:['ISFP','INFP','ESFP']},
+    ESFP:{emo:'🦁',name:'ハッピーエンタメ・ライオン',desc:'場の空気を明るくする。今ここの楽しさと寄り添いを重視。',tags:['情熱','同伴','体験'],match:['ISFJ','ISTJ','ENFJ']},
+    ESTJ:{emo:'🦬',name:'現実派リーダー・バイソン',desc:'原則・責任感が強く、安心感を与える。',tags:['原則','責任','安定'],match:['ISFP','INFP','ESFP']},
+    ESTP:{emo:'🐯',name:'即断実行・トラ',desc:'スピード感ある挑戦と率直なコミュニケーションを好む。',tags:['決断','挑戦','率直'],match:['ISFJ','INFJ','ESFJ']},
+    INFJ:{emo:'🦉',name:'洞察ガイド・フクロウ',desc:'深い絆と共通ビジョンを求める、やさしく芯のあるタイプ。',tags:['洞察','理想','やさしさ'],match:['ENFP','ENTP','ISFP']},
+    INFP:{emo:'🦥',name:'理想の恋人・ナマケモノ',desc:'価値観と理解を重んじ、愛で成長していく。',tags:['ロマン','純粋','共感'],match:['ENFJ','ENTJ','ESFJ']},
+    INTJ:{emo:'🐺',name:'ストラテジスト・オオカミ',desc:'合理的で長期計画型。境界と効率の尊重が必要。',tags:['戦略','自立','効率'],match:['ENFP','ENFJ','ESFP']},
+    INTP:{emo:'🦝',name:'思索パートナー・アライグマ',desc:'探究心が強く、率直な対話を好む。',tags:['理性','好奇心','誠実'],match:['ENFJ','ESFJ','ISFJ']},
+    ISFJ:{emo:'🦌',name:'やさしい守護者・シカ',desc:'細やかで実直。日々の気遣いで愛を示す。',tags:['配慮','実直','守護'],match:['ENFP','ESFP','ENTP']},
+    ISFP:{emo:'🕊️',name:'感性アーティスト・ハト',desc:'自由と誠実な関係を求め、過度なコントロールは苦手。',tags:['自由','体験','誠実'],match:['ENFJ','ESTJ','ESFJ']},
+    ISTJ:{emo:'🐻',name:'堅実な実務家・クマ',desc:'秩序と約束を重視。行動で愛を見せる。',tags:['秩序','責任','細部'],match:['ENFP','ESFP','INFP']},
+    ISTP:{emo:'🦫',name:'クールメーカー・ビーバー',desc:'独立心が強く実行派。適切な距離感を大切にする。',tags:['自立','行動','距離感'],match:['ENFJ','ESFJ','INFJ']},
+  };
+}
+function getAnimalsEN(){
+  return {
+    ENFJ:{emo:'🕊️',name:'Warm Leader · Dove',desc:'Tends to guide the pace with care, offering security and shared growth.',tags:['Empathy','Commitment','Long-term'],match:['INFP','ISFP','INTP']},
+    ENFP:{emo:'🦊',name:'Inspired Adventurer · Fox',desc:'High-energy and curious; seeks spark and growth in love.',tags:['Romance','Novelty','Sincerity'],match:['INFJ','INTJ','ISFJ']},
+    ENTJ:{emo:'🦅',name:'Action Commander · Eagle',desc:'Goal-driven and decisive; values independence and partnership.',tags:['Efficiency','Reliable','Boundaries'],match:['INFP','ISFP','ENFP']},
+    ENTP:{emo:'🐬',name:'Idea Player · Dolphin',desc:'Witty, debate-loving; needs intellectual sparks and freedom.',tags:['Creative','Dialogue','Freedom'],match:['INFJ','ISFJ','INTJ']},
+    ESFJ:{emo:'🐼',name:'Caring Steward · Panda',desc:'Attentive and relationship-focused; loves rituals and stability.',tags:['Caring','Stable','Practical'],match:['ISFP','INFP','ESFP']},
+    ESFP:{emo:'🦁',name:'Live-in-the-moment · Lion',desc:'Vibe master who values fun, warmth, and shared experiences.',tags:['Passion','Presence','Experience'],match:['ISFJ','ISTJ','ENFJ']},
+    ESTJ:{emo:'🦬',name:'Pragmatic Foreman · Bison',desc:'Principled and dependable; offers security and order.',tags:['Principle','Duty','Stability'],match:['ISFP','INFP','ESFP']},
+    ESTP:{emo:'🐯',name:'Decisive Doer · Tiger',desc:'Direct, thrill-seeking; prefers challenges and straight talk.',tags:['Decisive','Challenge','Direct'],match:['ISFJ','INFJ','ESFJ']},
+    INFJ:{emo:'🦉',name:'Insight Guide · Owl',desc:'Seeks deep bonds and shared vision; gentle yet firm.',tags:['Insight','Ideal','Gentle'],match:['ENFP','ENTP','ISFP']},
+    INFP:{emo:'🦥',name:'Ideal Romantic · Sloth',desc:'Values meaning and being understood; grows through love.',tags:['Romance','Purity','Empathy'],match:['ENFJ','ENTJ','ESFJ']},
+    INTJ:{emo:'🐺',name:'Strategic Partner · Wolf',desc:'Rational, long-range planner; needs respect for boundaries.',tags:['Strategy','Independent','Efficient'],match:['ENFP','ENFJ','ESFP']},
+    INTP:{emo:'🦝',name:'Analytic Partner · Raccoon',desc:'Curious and candid; prefers sincere, thoughtful exchange.',tags:['Rational','Curious','Honest'],match:['ENFJ','ESFJ','ISFJ']},
+    ISFJ:{emo:'🦌',name:'Gentle Guardian · Deer',desc:'Diligent and caring; shows love through daily acts.',tags:['Considerate','Practical','Protective'],match:['ENFP','ESFP','ENTP']},
+    ISFP:{emo:'🕊️',name:'Sensitive Artist · Dove',desc:'Seeks freedom and genuineness; dislikes over-control.',tags:['Freedom','Experience','Sincere'],match:['ENFJ','ESTJ','ESFJ']},
+    ISTJ:{emo:'🐻',name:'Dependable Doer · Bear',desc:'Orderly and responsible; love is in the details and deeds.',tags:['Order','Duty','Detail'],match:['ENFP','ESFP','INFP']},
+    ISTP:{emo:'🦫',name:'Cool Builder · Beaver',desc:'Independent and hands-on; values space and action over words.',tags:['Independent','Action','Space'],match:['ENFJ','ESFJ','INFJ']},
+  };
 }
 
-// ====== 進度、頁面渲染 ======
-function render(){
-  const total = QUESTIONS.length;
+// ===== 状态 =====
+const state = {page:0, perPage:2, answers:{}, score:{EI:0,SN:0,TF:0,JP:0}, lang:'zh'};
+
+// ===== 元素 =====
+const bar = document.getElementById('bar');
+const quiz = document.getElementById('quiz');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const submitBtn = document.getElementById('submit');
+const titleEl = document.getElementById('title');
+const introEl = document.getElementById('intro');
+const resultBox = document.getElementById('resultBox');
+const placeholder = document.getElementById('placeholder');
+const animalEl = document.getElementById('animal');
+const typeNameEl = document.getElementById('typeName');
+const typeDescEl = document.getElementById('typeDesc');
+const typeTagsEl = document.getElementById('typeTags');
+const matchesEl = document.getElementById('matches');
+const barsEl = document.getElementById('bars');
+const yourTypeLabel = document.getElementById('yourTypeLabel');
+const compatLabel = document.getElementById('compatLabel');
+const scoreLabel = document.getElementById('scoreLabel');
+
+// 语言切换
+document.getElementById('btnZH').onclick=()=>setLang('zh');
+document.getElementById('btnJA').onclick=()=>setLang('ja');
+document.getElementById('btnEN').onclick=()=>setLang('en');
+
+function setLang(l){ state.lang = l; renderAll(); }
+
+function renderAll(){
+  const T = TEXTS[state.lang];
+  titleEl.textContent = T.title;
+  introEl.textContent = T.intro;
+  prevBtn.textContent = T.btnPrev; nextBtn.textContent = T.btnNext; submitBtn.textContent = T.btnSubmit;
+  yourTypeLabel.textContent = T.yourType; compatLabel.textContent=T.compat; scoreLabel.textContent=T.score;
+  renderQuiz();
+}
+
+function renderQuiz(){
+  const T = TEXTS[state.lang];
+  const total = QUESTIONS_META.length;
   const answered = Object.keys(state.answers).length;
-  const pct = Math.round(answered/total*100);
-  barEl.style.width = pct + '%';
-
+  bar.style.width = Math.round(answered/total*100) + '%';
   const start = state.page * state.perPage;
-  const items = QUESTIONS.slice(start, start + state.perPage);
-  quizEl.innerHTML = items.map(q => renderQuestion(q)).join('');
-
-  // 控制按鈕
-  prevBtn.disabled = state.page === 0;
-  nextBtn.disabled = answered < Math.min(total, (state.page+1)*state.perPage);
+  const items = T.questions.slice(start, start + state.perPage);
+  quiz.innerHTML = items.map((item, idx)=>{
+    const qIndex = start + idx; const id = qIndex+1;
+    const name = 'q_'+id; const val = state.answers[id];
+    return `<div class="q">
+      <h3>${id}. ${item.q}</h3>
+      <div class="opts">
+        ${item.a.map((opt, j)=>`<label><input type="radio" name="${name}" value="${j===0?+1:-1}" ${(val===(j===0?+1:-1))?'checked':''}>${opt}</label>`).join('')}
+      </div>
+      <div class="muted">${dimLabel(QUESTIONS_META[qIndex].dim)}（左选项=正向，右选项=负向）</div>
+    </div>`;
+  }).join('');
+  prevBtn.disabled = state.page===0;
+  nextBtn.disabled = answered < Math.min(total,(state.page+1)*state.perPage);
   submitBtn.disabled = answered < total;
 }
 
-function renderQuestion(q){
-  const name = 'q_'+q.id;
-  const val = state.answers[q.id];
-  return `
-    <div class="q">
-      <h3>${q.id}. ${q.q}</h3>
-      <div class="opt">
-        ${q.a.map((opt, idx)=>`<label>
-          <input type="radio" name="${name}" value="${opt.v}" ${val==opt.v? 'checked':''} />
-          <span>${opt.t}</span>
-        </label>`).join('')}
-      </div>
-      <div class="hint">維度：${q.dim}（左選項偏正向，右選項偏負向）</div>
-    </div>
-  `;
+function dimLabel(k){
+  const map = {zh:{EI:'外向 E / 内向 I',SN:'感觉 S / 直觉 N',TF:'思考 T / 情感 F',JP:'判断 J / 知觉 P'},
+               ja:{EI:'外向 E / 内向 I',SN:'感覚 S / 直観 N',TF:'思考 T / 感情 F',JP:'判断 J / 知覚 P'},
+               en:{EI:'Extraversion E / Introversion I',SN:'Sensing S / iNtuition N',TF:'Thinking T / Feeling F',JP:'Judging J / Perceiving P'}};
+  return map[state.lang][k];
 }
 
-quizEl.addEventListener('change', (e)=>{
-  const target = e.target;
-  if(target && target.name && target.type==='radio'){
-    const id = Number(target.name.split('_')[1]);
-    const q = QUESTIONS.find(x=>x.id===id);
-    state.answers[id] = Number(target.value);
-    // 更新 score（先重算更穩妥）
-    state.score = {EI:0,SN:0,TF:0,JP:0};
-    for(const q of QUESTIONS){
-      const v = state.answers[q.id];
-      if(typeof v === 'number') state.score[q.dim]+= v;
-    }
-    render();
-  }
+quiz.addEventListener('change', (e)=>{
+  const t = e.target; if(!t || t.type!=='radio') return;
+  const id = Number(t.name.split('_')[1]);
+  state.answers[id] = Number(t.value);
+  recompute(); renderQuiz();
 });
 
-prevBtn.addEventListener('click', ()=>{ state.page = Math.max(0, state.page-1); render(); });
-nextBtn.addEventListener('click', ()=>{ state.page = Math.min(Math.ceil(QUESTIONS.length/state.perPage)-1, state.page+1); render(); });
-startBtn.addEventListener('click', ()=>{ state.page=0; render(); document.getElementById('app').scrollIntoView({behavior:'smooth'}); });
+prevBtn.onclick=()=>{ state.page = Math.max(0, state.page-1); renderQuiz(); };
+nextBtn.onclick=()=>{ state.page = Math.min(Math.ceil(QUESTIONS_META.length/state.perPage)-1, state.page+1); renderQuiz(); };
+submitBtn.onclick=()=>{ const type = toType(state.score); showResult(type); };
 
-// ====== 計算結果 ======
-function sign(x){ return x>0?1:(x<0?-1:0); }
+function recompute(){
+  state.score = {EI:0,SN:0,TF:0,JP:0};
+  for(let i=0;i<QUESTIONS_META.length;i++){
+    const id = i+1; const v = state.answers[id]; if(typeof v==='number') state.score[QUESTIONS_META[i].dim]+= v;
+  }
+}
+
 function toType(score){
-  const EI = score.EI>=0 ? 'E':'I';
-  const SN = score.SN>=0 ? 'S':'N';
-  const TF = score.TF>=0 ? 'T':'F';
-  const JP = score.JP>=0 ? 'J':'P';
+  const EI = score.EI>=0?'E':'I';
+  const SN = score.SN>=0?'S':'N';
+  const TF = score.TF>=0?'T':'F';
+  const JP = score.JP>=0?'J':'P';
   return EI+SN+TF+JP;
 }
 
-submitBtn.addEventListener('click', ()=>{
-  const type = toType(state.score);
-  showResult(type, state.score);
-  const share = encodeShare(type, state.score);
-  history.replaceState(null, '', '#'+share);
-});
-
-againBtn?.addEventListener('click', ()=>{
-  state.page=0; state.answers={}; state.score={EI:0,SN:0,TF:0,JP:0};
-  resultEl.hidden=true; render();
-});
-
-saveBtn.addEventListener('click', ()=>{
-  const type = toType(state.score);
-  localStorage.setItem('love_mbti', JSON.stringify({type, score:state.score, t:Date.now()}));
-  showToast('✅ 已儲存到本機');
-});
-
-loadBtn.addEventListener('click', ()=>{
-  const raw = localStorage.getItem('love_mbti');
-  if(!raw) return showToast('尚無已儲存結果');
-  try{ const data = JSON.parse(raw); showResult(data.type, data.score); }catch{ showToast('載入失敗'); }
-});
-
-copyLinkBtn.addEventListener('click', ()=>{
-  const url = location.href;
-  navigator.clipboard.writeText(url).then(()=> showToast('🔗 已複製結果連結')).catch(()=> showToast('無法複製，請手動選取網址列'));
-});
-
-shareBtn.addEventListener('click', ()=>{
-  navigator.clipboard.writeText(location.href).then(()=> showToast('已複製本頁連結，快分享給朋友！'));
-});
-
-// ====== 顯示結果 ======
-function showResult(type, score){
-  const info = TYPE_INFO[type] || {name:'未定義', tags:[], love:'', match:[]};
-  typeText.textContent = type + ' · ' + info.name;
-  lettersEl.innerHTML = letterPills(type, score);
-  tagsEl.innerHTML = info.tags.map(t=> `<div class="pill">#${t}</div>`).join('');
-  descEl.innerHTML = `<p><strong>戀愛傾向：</strong>${info.love}</p>`;
-  matchesEl.innerHTML = info.match.map(t=> `<div class="pill">${t}</div>`).join('');
-  barsEl.innerHTML = renderBars(score);
-  resultEl.hidden = false;
-  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+function showResult(type){
+  const T = TEXTS[state.lang];
+  const info = T.animals[type];
+  if(!info){ alert('No mapping for '+type); return; }
+  placeholder.hidden = true; resultBox.hidden = false;
+  animalEl.textContent = info.emo;
+  typeNameEl.textContent = `${type} · ${info.name}`;
+  typeDescEl.textContent = `<p>${info.desc}</p>`;
+  typeDescEl.innerHTML = `<p>${info.desc}</p>`;
+  typeTagsEl.innerHTML = info.tags.map(t=>`<span class="pill">#${t}</span>`).join('');
+  matchesEl.innerHTML = info.match.map(t=>`<span class="pill">${t}</span>`).join('');
+  renderBars();
+  document.getElementById('app').scrollIntoView({behavior:'smooth'});
 }
 
-function letterPills(type, score){
-  const dims = [['E','I','EI'],['S','N','SN'],['T','F','TF'],['J','P','JP']];
-  return dims.map(([L,R,key])=>{
-    const v = score[key];
-    const left = Math.max(0, (v+4)/8*100); // -4..+4 對應 0..100 粗略視覺
-    return `<div class="pill" title="${key}: ${v}">
-      <strong>${type.includes(L)?L:R}</strong> / ${L}${R}
-    </div>`;
-  }).join('');
-}
-
-function renderBars(score){
+function renderBars(){
   const items = [
-    {k:'EI', l:'E', r:'I', v:score.EI},
-    {k:'SN', l:'S', r:'N', v:score.SN},
-    {k:'TF', l:'T', r:'F', v:score.TF},
-    {k:'JP', l:'J', r:'P', v:score.JP},
+    {k:'EI',l:'E',r:'I',v:state.score.EI},
+    {k:'SN',l:'S',r:'N',v:state.score.SN},
+    {k:'TF',l:'T',r:'F',v:state.score.TF},
+    {k:'JP',l:'J',r:'P',v:state.score.JP},
   ];
-  return items.map(it=>{
-    const percent = Math.round((it.v+4)/8*100); // -4..+4 -> 0..100
-    return `<div style="margin:10px 0">
-      <div class="muted">${it.k}: ${it.l} ↔ ${it.r}（${it.v}）</div>
-      <div class="progress"><div style="width:${percent}%"></div></div>
+  barsEl.innerHTML = items.map(it=>{
+    const pct = Math.round((it.v+4)/8*100); // -4..+4 -> 0..100 视觉化
+    return `<div style="margin:8px 0">
+      <div class="muted">${it.k}: ${it.l} ↔ ${it.r} （${it.v}）</div>
+      <div class="progress"><div style="width:${pct}%"></div></div>
     </div>`;
   }).join('');
 }
 
-// ====== 分享／連結還原 ======
-function encodeShare(type, score){
-  const payload = {t:type, s:score};
-  const str = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-  return str;
-}
-function decodeShare(hash){
-  try{
-    const obj = JSON.parse(decodeURIComponent(escape(atob(hash))));
-    return obj;
-  }catch{ return null }
-}
-
-// 如網址帶 hash，自動還原
-(function(){
-  const h = location.hash.replace('#','');
-  if(h){
-    const data = decodeShare(h);
-    if(data && data.t && data.s){ showResult(data.t, data.s); hashInfo.textContent = '已從網址還原結果：'+data.t; }
-    else hashInfo.textContent = '偵測到分享代碼，但解析失敗。';
-  }else{
-    hashInfo.textContent = '小技巧：完成後會生成可分享的網址。';
-  }
-})();
-
-// 初始化
-render();
+// 初始渲染
+renderAll();
 </script>
 </body>
 </html>

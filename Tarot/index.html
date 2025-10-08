@@ -137,7 +137,7 @@ function spawnParticles(color="#a29bfe"){
   }
 }
 
-// 随机固定结果
+// 随机生成运势数据
 function genFortuneData(){
   return {
     love: Math.floor(Math.random()*4),
@@ -147,10 +147,13 @@ function genFortuneData(){
   };
 }
 
-// 渲染报告
+// 渲染报告（带修复逻辑）
 function renderFortune(card,reversed,lang,data){
+  if(!data || data.love == null){
+    console.warn("⚠️ fortuneData invalid, regenerating...", data);
+    data = genFortuneData();
+  }
   const t=i18n[lang]||i18n.zh;
-  console.log(data);
   fortuneTitle.textContent=t.title;
   const parts=[
     `${t.categories[0]}：${t.love[data.love]} <span class='stars'>${"★".repeat(data.stars[0])}</span>`,
@@ -158,12 +161,12 @@ function renderFortune(card,reversed,lang,data){
     `${t.categories[2]}：${t.health[data.health]} <span class='stars'>${"★".repeat(data.stars[2])}</span>`
   ].map(s=>`<div class='fortune-item'>${s}</div>`).join("");
   fortuneText.innerHTML=parts+`<hr style='opacity:0.3'>
-   📖 <b>${card.name[lang]}</b>：${card.meaning[lang]}<br>
+   📖 <b>${card.name[lang]||card.name.zh}</b>：${card.meaning[lang]||card.meaning.zh}<br>
    🔄 ${reversed?t.reversed:t.upright}`;
   fortuneBox.style.display="block";
 }
 
-// 缓存
+// 本地缓存
 const todayKey=new Date().toISOString().slice(0,10);
 let saved=JSON.parse(localStorage.getItem("tarot_today")||"null");
 if(saved&&saved.date===todayKey){
@@ -172,7 +175,7 @@ if(saved&&saved.date===todayKey){
   reset.style.display="inline-block";
 }
 
-// 抽牌按钮
+// 抽牌
 btn.addEventListener("click",()=>{
   const lang=langSelect.value;
   const stored=JSON.parse(localStorage.getItem("tarot_today")||"null");
@@ -190,7 +193,7 @@ btn.addEventListener("click",()=>{
   spawnParticles(elementsColor[card.suit]);
 });
 
-// 重新抽牌按钮
+// 重新抽牌
 reset.addEventListener("click",()=>{
   const lang=langSelect.value;
   localStorage.removeItem("tarot_today");
@@ -206,6 +209,7 @@ reset.addEventListener("click",()=>{
 
 // 显示卡片
 function showCard(card,reversed,lang,fortuneData,isCached){
+  if(!fortuneData || fortuneData.love==null){fortuneData=genFortuneData();}
   const img=getImgUrl(card.id,card.suit);
   front.style.backgroundImage=`url('${img}')`;
   front.style.transform=reversed?"rotate(180deg)":"rotate(0)";

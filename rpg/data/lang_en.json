@@ -1,106 +1,141 @@
 {
-  "prologue": {
+  "village_wake": {
     "text": [
-      "You awaken on a deserted shore, your memories washed away with the tide.",
-      "A faint glow flickers beside you—a glass bottle half-buried in sand."
+      "You awaken in the quiet village of Eirinn. Warm bread and damp earth scent the morning air.",
+      "Rumors ripple through the stalls: somewhere in the old forest lies a relic called the Dawn Fragment—the sort of tale that sends fools to glory or graves."
     ],
-    "choices": ["Pick up the bottle", "Look around the beach"]
+    "choices": ["Explore the square", "Visit the elder", "Go to the tavern"]
   },
-  "bottle": {
+  "village_square": {
     "text": [
-      "Inside the bottle is a rolled-up paper shimmering faintly.",
-      "A whisper echoes in your head: 'Follow the light to find your path…'"
+      "The square bustles. Chickens escape children; a baker laughs; a minstrel tunes a cracked lute.",
+      "A painted sign points toward the forest trail, its letters faded by wind and years."
     ],
-    "choices": ["Open the bottle", "Keep it for later"]
+    "choices": ["Head to the forest", "Return to where you woke"]
   },
-  "bottle_message": {
+  "village_elder": {
     "text": [
-      "The message glows brightly, forming a trail of floating lights toward the forest.",
-      "The wind carries a voice—soft, guiding, familiar."
+      "The elder sits beside a hearth that has seen generations. Lines in her face map old victories and older grief.",
+      "\"Traveler, our crops wither and the river is sick. The Dawn Fragment was hidden in ancient ruins to hold back the dark. Bring it home, and perhaps the land will breathe again.\""
     ],
-    "choices": ["Follow the lights", "Ignore and stay"]
+    "choices": ["Accept the quest", "Decline and return to the square"]
   },
-  "beach_look": {
+  "village_tavern": {
     "text": [
-      "To the left, a dark forest looms. To the right, a faint firelight flickers in the distance.",
-      "You can still hear the sea behind you."
+      "Inside the tavern: stew, laughter, clacking dice. The barkeep polishes a glass with the intensity of a priest.",
+      "A hooded merchant watches you, and an adventurer in dented armor boasts of secrets for sale."
     ],
-    "choices": ["Head into the forest", "Go toward the firelight"]
+    "choices": ["Buy a rumor (5 gold)", "Talk to the merchant", "Leave the tavern"]
   },
-  "forest_path": {
+  "merchant_offer": {
     "text": [
-      "The glowing trail leads you into the woods. Strange symbols mark the trees.",
-      "You feel a presence watching."
+      "The merchant leans in. \"I’m hiring an escort through the forest. Bandits hunt my route, and I'm not keen to be inventory.\"",
+      "\"Help me reach the ruins’ road, and I’ll owe you a favor money can’t buy.\""
     ],
-    "choices": ["Call out", "Keep walking silently"]
+    "choices": ["Accept the escort job", "Refuse and linger in the tavern"]
   },
-  "forest_sprite": {
+  "rumor_info": {
     "text": [
-      "A small spirit appears, wings shimmering like glass. 'You're not from this world, are you?'",
-      "It offers you a glowing flower."
+      "The braggart lowers his voice. \"In the ruins there’s a pedestal of blue stone. What you seek sleeps beneath it.\"",
+      "He pauses. \"But the forest itself tests the greedy. Walk true, or the trees will walk you in circles.\""
     ],
-    "choices": ["Accept the help", "Refuse politely"]
+    "choices": ["Seek the ruins through the forest"]
   },
-  "sprite_gift": {
+  "forest_entry": {
     "text": [
-      "You take the flower—it pulses warmly in your palm.",
-      "The spirit smiles. 'This will prove your kindness.'"
+      "At the forest’s lip, the light grows green. Wind carries birdsong and something like the memory of bells.",
+      "Three paths present themselves: a trampled track, a quiet clearing thick with clover, and the patient way back."
     ],
-    "choices": ["Continue toward the village"]
+    "choices": ["Follow the trampled trail", "Search the quiet clearing", "Return to the village"]
   },
-  "dark_forest": {
+  "elf_meet": {
     "text": [
-      "You wander deeper into the dark woods. Whispers twist around you.",
-      "The path vanishes beneath thick fog."
+      "In a ring of mushrooms stands an elf, hair braided with morning dew. She hums a tune that seems to mend nothing and everything.",
+      "\"Take this dawn-blossom,\" she says, offering a faintly glowing flower. \"It remembers true paths—and true hearts.\""
     ],
-    "choices": ["You lose your way", "You see a distant light"]
+    "choices": ["Accept the flower", "Refuse and step away"]
   },
-  "village_gate": {
+  "forest_deep": {
     "text": [
-      "A wooden gate stands before a small village.",
-      "A sleepy guard eyes you suspiciously."
+      "The trail narrows. Bark bears sigils worn by weather and longing.",
+      "Somewhere ahead, stone breathes. Somewhere aside, a traveler groans. Overhead, leaves practice the art of dreams."
     ],
-    "choices": ["Talk to the guard", "Sneak inside quietly"]
+    "choices": ["Press on toward the ruins", "Help the struggling traveler", "Rest beneath an old tree"]
   },
-  "guard_talk": {
+  "merchant_sidequest": {
     "text": [
-      "'Travelers need a token of trust,' says the guard.",
-      "He glances at your hands expectantly."
+      "You find the merchant from the tavern, pinned beneath a toppled cart. He wheezes, grinning anyway. \"Knew you’d show.\"",
+      "Bandits prowl nearby. The merchant eyes you, trusting your decision with the sort of faith that can break a person or make them."
     ],
-    "choices": ["Show the glowing flower", "You have nothing to show"]
+    "choices": ["Escort him onward to the ruins road", "Rob him and take the goods"]
   },
-  "market_square": {
+  "dream_scene": {
     "text": [
-      "Inside, a busy market hums with life. Merchants shout and barter.",
-      "One merchant drops his bag of gold nearby."
+      "Drowsing beneath the oak, you dream of a city made of song and a gate that opens only for those who have given something away.",
+      "When you wake, the dream is gone—yet the road ahead feels lighter, as if it remembers you."
     ],
-    "choices": ["Help the merchant", "Ignore and walk away"]
+    "choices": ["Rise and continue toward the ruins"]
   },
-  "sidequest": {
+  "ancient_ruins": {
     "text": [
-      "You return the merchant’s bag. He bows deeply and hands you a silver charm.",
-      "'May luck follow you, stranger.'"
+      "The ruins crouch like a memory: blue stone, shattered arches, moss drinking from hidden seams.",
+      "At the center stands a pedestal, its surface warm as if it hoards sunrise."
     ],
-    "choices": ["Continue your journey"]
+    "choices": ["Search beneath the pedestal", "Return to the forest"]
+  },
+  "fragment_found": {
+    "text": [
+      "You lift a panel of stone. Beneath, a shard glows the color of first light. It thrums, and your pulse answers.",
+      "A whisper curls through your mind: \"Keep me, and change. Return me, and heal.\""
+    ],
+    "choices": ["Keep the fragment", "Return it to the elder"]
+  },
+  "village_return": {
+    "text": [
+      "Word races faster than feet. By the time you reach the square, doors open, faces bloom.",
+      "The elder’s hands tremble around the shard. \"You’ve done more than any of us dared to ask.\""
+    ],
+    "choices": ["Share in the celebration", "Prepare for a longer journey to the capital"]
+  },
+  "corrupt_path": {
+    "text": [
+      "You pocket the shard. Its warmth grows honey-thick, then fever-hot. Colors sharpen; kindness dulls.",
+      "In reflections you wear a stranger’s smile. The shard whispers paths only you can walk—and others cannot survive."
+    ],
+    "choices": ["Give in to the power", "Fight it and walk away"]
+  },
+  "capital_journey": {
+    "text": [
+      "Caravans join your road. Stories braid into a rope strong enough to cross mountains.",
+      "At last the capital rises: bright spires, banners like rivers, crowds like weather. The palace waits beyond a sun-bright square."
+    ],
+    "choices": ["Enter the palace to seek an audience"]
   },
   "good_end": {
     "text": [
-      "The guard lets you in. The village welcomes you as a traveler of light.",
-      "Under the moon, your new life in this world begins."
+      "The fragment’s light returns to the village’s well and fields. Springs run clear; wheat bends like prayer.",
+      "In the years that follow, children trade stories of the Traveler who carried dawn back home."
     ],
     "choices": []
   },
   "neutral_end": {
     "text": [
-      "You live quietly among strangers, never discovering your true purpose.",
-      "But peace has its own reward."
+      "You resist the shard, but you cannot love it. You bury it where wildflowers will keep the secret.",
+      "Life goes on. Not heroic, not tragic—simply yours. Sometimes, that is the rarest ending."
     ],
     "choices": []
   },
-  "bad_end": {
+  "evil_end": {
     "text": [
-      "Lost in the forest, you sink into the mist as your memories fade once more.",
-      "The sea never answers your cries."
+      "You take what isn’t offered. The merchant’s cry fades beneath the forest’s polite silence.",
+      "When the shard stirs later, it finds you ready. The world will learn your name, but not how to say it kindly."
+    ],
+    "choices": []
+  },
+  "hero_end": {
+    "text": [
+      "Before the throne you lay the fragment and the flower. Light floods the hall without burning anyone at all.",
+      "Your deeds stitch villages to roads, roads to cities, and strangers to one another. The title you receive is simple and heavy: Keeper of Dawn."
     ],
     "choices": []
   }

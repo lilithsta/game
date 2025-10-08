@@ -1,0 +1,17 @@
+{
+  "prologue": {
+    "text": [
+      "You wake up on a strange beach.",
+      "A glowing bottle drifts to your feet."
+    ],
+    "choices": ["Pick up the bottle", "Look around the beach"]
+  },
+  "bottle": {
+    "text": ["Inside is a faint light and a note."],
+    "choices": ["Read the note"]
+  },
+  "look_around": {
+    "text": ["You see a forest path and a light in the distance."],
+    "choices": ["Head toward the light"]
+  }
+}

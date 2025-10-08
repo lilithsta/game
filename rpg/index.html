@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Isekai Text Adventure</title>
+  <title>Fragments of Dawn</title>
   <link rel="stylesheet" href="assets/styles.css"/>
 </head>
 <body>
   <header class="topbar">
-    <h1 id="title">Isekai Text Adventure</h1>
+    <h1 id="title">Fragments of Dawn</h1>
     <nav class="actions">
-      <button id="btn-new">New</button>
+      <button id="btn-new">New Game</button>
       <button id="btn-save">Save</button>
       <button id="btn-load">Load</button>
       <select id="lang-select">
-        <option value="en" selected>English</option>
+        <option value="en">English</option>
         <option value="zh">中文</option>
         <option value="jp">日本語</option>
       </select>
@@ -22,34 +22,38 @@
   </header>
 
   <main class="layout">
-    <section class="sidebar">
-      <div class="panel">
-        <h2>Stats</h2>
-        <ul id="stats">
-          <li>HP: <span data-k="hp">—</span></li>
-          <li>Gold: <span data-k="gold">—</span></li>
-          <li>Location: <span data-k="location">—</span></li>
-        </ul>
-      </div>
-      <div class="panel">
-        <h2>Inventory</h2>
-        <ul id="inventory"></ul>
-      </div>
-    </section>
-
-    <section class="stage">
+    <section class="story">
       <div id="scene-img" class="scene-img"></div>
       <article id="scene-text" class="scene-text"></article>
       <ul id="choices" class="choices"></ul>
     </section>
+
+    <aside class="sidebar">
+      <div class="panel">
+        <h3>Status</h3>
+        <ul id="stats">
+          <li>HP : <span id="stat-hp"></span></li>
+          <li>Gold : <span id="stat-gold"></span></li>
+          <li>Reputation : <span id="stat-rep"></span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Quests</h3>
+        <ul id="quests"></ul>
+      </div>
+      <div class="panel">
+        <h3>Inventory</h3>
+        <ul id="inventory"></ul>
+      </div>
+    </aside>
   </main>
 
   <script>
     window.GAME_CONFIG = {
       storyUrl: "data/story_base.json",
       langBase: "data/lang_",
-      autosaveKey: "isekai_save_v3",
-      lang: "en"
+      lang: "en",
+      autosaveKey: "isekai_save_v5"
     };
   </script>
   <script src="assets/game.js" defer></script>

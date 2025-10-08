@@ -14,74 +14,23 @@
     padding: 0;
     transition: background 1s ease;
   }
-  h1 {
-    margin-top: 40px;
-    font-size: 1.8em;
-    text-shadow: 0 0 10px #a29bfe;
-  }
-  #langSelect {
-    margin: 10px;
-    background: #00cec9;
-    border: none;
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  #drawBtn {
-    background: #6c5ce7;
-    border: none;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.3s;
-    margin-top: 20px;
-  }
-  #drawBtn:hover { background: #a29bfe; }
-
-  .card {
-    width: 240px;
-    height: 420px;
-    margin: 40px auto;
-    border-radius: 10px;
-    box-shadow: 0 0 20px #6c5ce7;
-    background-color: #2d3436;
-    perspective: 1000px;
-    position: relative;
-  }
-  .inner {
-    width: 100%;
-    height: 100%;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-    position: relative;
-  }
-  .flip .inner { transform: rotateY(180deg); }
-  .front, .back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 10px;
-  }
-  .front {
-    background-size: cover;
-    background-position: center;
-  }
-  .back {
-    transform: rotateY(180deg);
-    background: rgba(30,30,60,0.9);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
-  }
-  #cardName { font-size: 1.2em; margin-bottom: 10px; color: #ffd86b; }
-  #meaning { font-size: 0.95em; line-height: 1.4em; }
-  footer { color: #aaa; font-size: 0.8em; margin-bottom: 20px; }
+  h1 {margin-top:40px;font-size:1.8em;text-shadow:0 0 10px #a29bfe;}
+  #langSelect{margin:10px;background:#00cec9;border:none;color:#fff;padding:8px 12px;border-radius:6px;cursor:pointer;}
+  #drawBtn{background:#6c5ce7;border:none;color:#fff;padding:12px 24px;border-radius:10px;cursor:pointer;font-size:16px;transition:all 0.3s;margin-top:20px;}
+  #drawBtn:hover{background:#a29bfe;}
+  .card{width:240px;height:420px;margin:40px auto;border-radius:10px;box-shadow:0 0 20px #6c5ce7;background-color:#2d3436;perspective:1000px;position:relative;}
+  .inner{width:100%;height:100%;transition:transform 0.8s;transform-style:preserve-3d;position:relative;}
+  .flip .inner{transform:rotateY(180deg);}
+  .front,.back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;}
+  .front{background-size:cover;background-position:center;}
+  .back{transform:rotateY(180deg);background:rgba(30,30,60,0.9);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:15px;}
+  #cardName{font-size:1.2em;margin-bottom:10px;color:#ffd86b;}
+  #meaning{font-size:0.95em;line-height:1.4em;}
+  #fortuneBox{margin:20px auto;width:85%;max-width:500px;background:rgba(255,255,255,0.08);border-radius:12px;padding:15px;text-align:left;box-shadow:0 0 10px rgba(0,0,0,0.3);}
+  #fortuneBox h3{text-align:center;color:#ffd86b;}
+  .fortune-item{margin:6px 0;}
+  .stars{color:#ffd700;font-size:1.1em;}
+  footer{color:#aaa;font-size:0.8em;margin-bottom:20px;}
 </style>
 </head>
 <body>
@@ -91,8 +40,7 @@
   <option value="zh">中文</option>
   <option value="en">English</option>
   <option value="jp">日本語</option>
-</select>
-<br>
+</select><br>
 <button id="drawBtn">开始抽牌 / Draw / カードを引く</button>
 
 <div class="card" id="tarotCard">
@@ -105,63 +53,17 @@
   </div>
 </div>
 
+<div id="fortuneBox" style="display:none;">
+  <h3>🌟 今日运势报告 / Daily Fortune</h3>
+  <div id="fortuneText"></div>
+</div>
+
 <footer>© 2025 今日塔罗 · Tarot of the Day</footer>
 
 <script>
-/* --- Tarot deck: 全 78 张 --- */
-const tarotDeck = [
-  // Major Arcana
-  { id: 0, suit: "m", name:{zh:"愚者",en:"The Fool",jp:"愚者"}, meaning:{zh:"新的开始，自由与冒险。",en:"New beginnings, freedom, adventure.",jp:"新しい旅立ちと自由。"} },
-  { id: 1, suit: "m", name:{zh:"魔术师",en:"The Magician",jp:"魔術師"}, meaning:{zh:"展现创造力与行动力。",en:"Manifestation and creativity.",jp:"創造と意志の力。"} },
-  { id: 2, suit: "m", name:{zh:"女祭司",en:"The High Priestess",jp:"女教皇"}, meaning:{zh:"直觉与潜意识的智慧。",en:"Intuition and hidden knowledge.",jp:"直感と潜在意識。"} },
-  { id: 3, suit: "m", name:{zh:"女皇",en:"The Empress",jp:"女帝"}, meaning:{zh:"丰饶、母性、创造。",en:"Abundance and creativity.",jp:"豊かさと母性。"} },
-  { id: 4, suit: "m", name:{zh:"皇帝",en:"The Emperor",jp:"皇帝"}, meaning:{zh:"权威与秩序。",en:"Authority and structure.",jp:"権威と秩序。"} },
-  { id: 5, suit: "m", name:{zh:"教皇",en:"The Hierophant",jp:"法王"}, meaning:{zh:"传统与信仰。",en:"Tradition and faith.",jp:"伝統と信仰。"} },
-  { id: 6, suit: "m", name:{zh:"恋人",en:"The Lovers",jp:"恋人たち"}, meaning:{zh:"爱与选择。",en:"Love and choices.",jp:"愛と選択。"} },
-  { id: 7, suit: "m", name:{zh:"战车",en:"The Chariot",jp:"戦車"}, meaning:{zh:"决心与胜利。",en:"Determination and triumph.",jp:"決意と勝利。"} },
-  { id: 8, suit: "m", name:{zh:"力量",en:"Strength",jp:"力"}, meaning:{zh:"勇气与温柔。",en:"Courage and compassion.",jp:"勇気と優しさ。"} },
-  { id: 9, suit: "m", name:{zh:"隐士",en:"The Hermit",jp:"隠者"}, meaning:{zh:"内省与智慧。",en:"Introspection and guidance.",jp:"内省と知恵。"} },
-  { id:10, suit:"m", name:{zh:"命运之轮",en:"Wheel of Fortune",jp:"運命の輪"}, meaning:{zh:"命运转变。",en:"Change, destiny.",jp:"運命の転換。"} },
-  { id:11, suit:"m", name:{zh:"正义",en:"Justice",jp:"正義"}, meaning:{zh:"公平与平衡。",en:"Fairness and truth.",jp:"公正と真実。"} },
-  { id:12, suit:"m", name:{zh:"倒吊人",en:"The Hanged Man",jp:"吊られた男"}, meaning:{zh:"放下与新视角。",en:"Surrender, new perspective.",jp:"犠牲と新しい視点。"} },
-  { id:13, suit:"m", name:{zh:"死神",en:"Death",jp:"死神"}, meaning:{zh:"结束与重生。",en:"Transformation.",jp:"終わりと再生。"} },
-  { id:14, suit:"m", name:{zh:"节制",en:"Temperance",jp:"節制"}, meaning:{zh:"平衡与调和。",en:"Balance and moderation.",jp:"調和とバランス。"} },
-  { id:15, suit:"m", name:{zh:"恶魔",en:"The Devil",jp:"悪魔"}, meaning:{zh:"诱惑与束缚。",en:"Temptation and control.",jp:"誘惑と支配。"} },
-  { id:16, suit:"m", name:{zh:"高塔",en:"The Tower",jp:"塔"}, meaning:{zh:"突变与觉醒。",en:"Sudden change.",jp:"崩壊と覚醒。"} },
-  { id:17, suit:"m", name:{zh:"星星",en:"The Star",jp:"星"}, meaning:{zh:"希望与灵感。",en:"Hope and inspiration.",jp:"希望とひらめき。"} },
-  { id:18, suit:"m", name:{zh:"月亮",en:"The Moon",jp:"月"}, meaning:{zh:"幻象与直觉。",en:"Illusion and intuition.",jp:"幻想と直感。"} },
-  { id:19, suit:"m", name:{zh:"太阳",en:"The Sun",jp:"太陽"}, meaning:{zh:"喜悦与成功。",en:"Joy and success.",jp:"喜びと成功。"} },
-  { id:20, suit:"m", name:{zh:"审判",en:"Judgement",jp:"審判"}, meaning:{zh:"觉醒与救赎。",en:"Awakening and redemption.",jp:"目覚めと救い。"} },
-  { id:21, suit:"m", name:{zh:"世界",en:"The World",jp:"世界"}, meaning:{zh:"完成与圆满。",en:"Completion and harmony.",jp:"完成と調和。"} },
+document.addEventListener("DOMContentLoaded",()=>{
 
-  // Minor Arcana auto generator
-  ...["C","w","s","p"].flatMap(suit =>
-    Array.from({length:14},(_,i)=>({
-      id:i+1, suit,
-      name:{
-        zh:`${{"C":"圣杯","w":"权杖","s":"宝剑","p":"钱币"}[suit]}${i+1}`,
-        en:`${{"C":"Cups","w":"Wands","s":"Swords","p":"Pentacles"}[suit]} ${i+1}`,
-        jp:`${{"C":"カップ","w":"ワンド","s":"ソード","p":"ペンタクル"}[suit]}の${i+1}`
-      },
-      meaning:{
-        zh:{"C":"情感与关系","w":"行动与创造","s":"思想与真理","p":"物质与事业"}[suit],
-        en:{"C":"Emotion & relationship","w":"Action & creativity","s":"Mind & truth","p":"Material & work"}[suit],
-        jp:{"C":"感情と関係","w":"行動と創造","s":"思考と真実","p":"物質と仕事"}[suit]
-      }
-    }))
-  )
-];
-
-/* --- Elements --- */
-const elementsColor = {
-  M: "#5e4fa2", // 紫灵
-  C: "#2e86de", // 水蓝
-  W: "#ff8c42", // 火橙
-  S: "#b2bec3", // 风灰
-  P: "#55efc4"  // 土绿
-};
-
-/* --- DOM refs --- */
+const elementsColor={m:"#5e4fa2",c:"#2e86de",w:"#ff8c42",s:"#b2bec3",p:"#55efc4"};
 const btn=document.getElementById("drawBtn");
 const card=document.getElementById("tarotCard");
 const inner=card.querySelector(".inner");
@@ -169,27 +71,109 @@ const front=document.getElementById("front");
 const cardName=document.getElementById("cardName");
 const meaning=document.getElementById("meaning");
 const langSelect=document.getElementById("langSelect");
+const fortuneBox=document.getElementById("fortuneBox");
+const fortuneText=document.getElementById("fortuneText");
 
-/* --- URL builder --- */
-function getImgUrl(id, suit) {
-  const safeSuit = (suit ? suit.toLowerCase() : "m");
-  const num = String(id).padStart(2, "0");
+// 图片路径构造（本地 /images/）
+function getImgUrl(id,suit){
+  const safeSuit=(suit?suit.toLowerCase():"m");
+  const num=String(id).padStart(2,"0");
   return `images/${safeSuit}${num}.jpg`;
 }
 
-/* --- Save/Load --- */
+// 随机星级 1~5
+function randomStars(){return "★".repeat(Math.floor(Math.random()*3+3));} // 3~5星
+
+// 生成今日运势文本
+function genFortune(cardData,reversed,lang){
+  const starLove=randomStars(),starCareer=randomStars(),starHealth=randomStars();
+  let base = {
+    zh: {
+      love: ["感情上需真诚沟通","爱情有新机遇","注意误会与冷淡","浪漫能量增强"],
+      career: ["工作进展顺利","适合团队合作","注意计划与耐心","有晋升机会"],
+      health: ["保持规律作息","注意情绪压力","精力充沛","饮食需均衡"],
+      revHint: "逆位：暗示内在矛盾或阻碍，请保持冷静。",
+      norHint: "正位：能量流动顺畅，代表积极前进。"
+    },
+    en: {
+      love: ["Be honest in love.","New romantic chance.","Avoid misunderstandings.","Emotional energy flows strongly."],
+      career: ["Work goes well.","Good for teamwork.","Stay patient and plan.","Chance for promotion."],
+      health: ["Keep a good routine.","Manage stress.","Energetic today.","Eat balanced meals."],
+      revHint: "Reversed: Indicates blockage or confusion—stay calm.",
+      norHint: "Upright: Energy flows positively and progress is likely."
+    },
+    jp: {
+      love: ["恋愛では誠実な会話を。","新しい出会いの兆し。","誤解や冷淡に注意。","ロマンチックな気配。"],
+      career: ["仕事は順調。","チームワークが吉。","計画と忍耐が大切。","昇進のチャンスあり。"],
+      health: ["生活リズムを整えて。","ストレスに注意。","活力にあふれる日。","食事のバランスを取ろう。"],
+      revHint: "逆位置：内面の混乱や停滞を示します。冷静さを保って。",
+      norHint: "正位置：前向きな流れと発展の兆しがあります。"
+    }
+  }[lang];
+
+  function pick(a){return a[Math.floor(Math.random()*a.length)];}
+  const txt = `
+  <div class='fortune-item'>💘 <b>爱情：</b>${pick(base.love)} <span class='stars'>${starLove}</span></div>
+  <div class='fortune-item'>💼 <b>事业：</b>${pick(base.career)} <span class='stars'>${starCareer}</span></div>
+  <div class='fortune-item'>💪 <b>健康：</b>${pick(base.health)} <span class='stars'>${starHealth}</span></div>
+  <hr style='opacity:0.3'>
+  <div style='font-size:0.9em;line-height:1.4em;'>
+  📖 <b>${cardData.name[lang]}</b>：${cardData.meaning[lang]}<br>
+  🔄 ${reversed?base.revHint:base.norHint}
+  </div>`;
+  fortuneText.innerHTML=txt;
+  fortuneBox.style.display="block";
+}
+
+// 生成全卡组
+const tarotDeck=[
+  {id:0,suit:"m",name:{zh:"愚者",en:"The Fool",jp:"愚者"},meaning:{zh:"新的开始，自由与冒险。",en:"New beginnings, freedom, adventure.",jp:"新しい旅立ちと自由。"}},
+  {id:1,suit:"m",name:{zh:"魔术师",en:"The Magician",jp:"魔術師"},meaning:{zh:"展现创造力与行动力。",en:"Manifestation and creativity.",jp:"創造と意志の力。"}},
+  {id:2,suit:"m",name:{zh:"女祭司",en:"The High Priestess",jp:"女教皇"},meaning:{zh:"直觉与潜意识的智慧。",en:"Intuition and hidden knowledge.",jp:"直感と潜在意識の知恵。"}},
+  {id:3,suit:"m",name:{zh:"女皇",en:"The Empress",jp:"女帝"},meaning:{zh:"丰饶、母性、创造。",en:"Abundance and creativity.",jp:"豊かさと母性。"}},
+  {id:4,suit:"m",name:{zh:"皇帝",en:"The Emperor",jp:"皇帝"},meaning:{zh:"权威与秩序。",en:"Authority and structure.",jp:"権威と秩序。"}},
+  {id:5,suit:"m",name:{zh:"教皇",en:"The Hierophant",jp:"法王"},meaning:{zh:"传统与信仰。",en:"Tradition and faith.",jp:"伝統と信仰。"}},
+  {id:6,suit:"m",name:{zh:"恋人",en:"The Lovers",jp:"恋人たち"},meaning:{zh:"爱与选择。",en:"Love and choices.",jp:"愛と選択。"}},
+  {id:7,suit:"m",name:{zh:"战车",en:"The Chariot",jp:"戦車"},meaning:{zh:"决心与胜利。",en:"Determination and triumph.",jp:"決意と勝利。"}},
+  {id:8,suit:"m",name:{zh:"力量",en:"Strength",jp:"力"},meaning:{zh:"勇气与温柔。",en:"Courage and compassion.",jp:"勇気と優しさ。"}},
+  {id:9,suit:"m",name:{zh:"隐士",en:"The Hermit",jp:"隠者"},meaning:{zh:"内省与智慧。",en:"Introspection and guidance.",jp:"内省と知恵。"}},
+  {id:10,suit:"m",name:{zh:"命运之轮",en:"Wheel of Fortune",jp:"運命の輪"},meaning:{zh:"命运转变。",en:"Change, destiny.",jp:"運命の転換。"}},
+  {id:11,suit:"m",name:{zh:"正义",en:"Justice",jp:"正義"},meaning:{zh:"公平与平衡。",en:"Fairness and truth.",jp:"公正と真実。"}},
+  {id:12,suit:"m",name:{zh:"倒吊人",en:"The Hanged Man",jp:"吊られた男"},meaning:{zh:"放下与新视角。",en:"Surrender, new perspective.",jp:"犠牲と新しい視点。"}},
+  {id:13,suit:"m",name:{zh:"死神",en:"Death",jp:"死神"},meaning:{zh:"结束与重生。",en:"Transformation.",jp:"終わりと再生。"}},
+  {id:14,suit:"m",name:{zh:"节制",en:"Temperance",jp:"節制"},meaning:{zh:"平衡与调和。",en:"Balance and moderation.",jp:"調和とバランス。"}},
+  {id:15,suit:"m",name:{zh:"恶魔",en:"The Devil",jp:"悪魔"},meaning:{zh:"诱惑与束缚。",en:"Temptation and control.",jp:"誘惑と支配。"}},
+  {id:16,suit:"m",name:{zh:"高塔",en:"The Tower",jp:"塔"},meaning:{zh:"突变与觉醒。",en:"Sudden change.",jp:"崩壊と覚醒。"}},
+  {id:17,suit:"m",name:{zh:"星星",en:"The Star",jp:"星"},meaning:{zh:"希望与灵感。",en:"Hope and inspiration.",jp:"希望とひらめき。"}},
+  {id:18,suit:"m",name:{zh:"月亮",en:"The Moon",jp:"月"},meaning:{zh:"幻象与直觉。",en:"Illusion and intuition.",jp:"幻想と直感。"}},
+  {id:19,suit:"m",name:{zh:"太阳",en:"The Sun",jp:"太陽"},meaning:{zh:"喜悦与成功。",en:"Joy and success.",jp:"喜びと成功。"}},
+  {id:20,suit:"m",name:{zh:"审判",en:"Judgement",jp:"審判"},meaning:{zh:"觉醒与救赎。",en:"Awakening and redemption.",jp:"目覚めと救い。"}},
+  {id:21,suit:"m",name:{zh:"世界",en:"The World",jp:"世界"},meaning:{zh:"完成与圆满。",en:"Completion and harmony.",jp:"完成と調和。"}},
+
+  ...["c","w","s","p"].flatMap(suit=>Array.from({length:14},(_,i)=>({
+    id:i+1,suit,
+    name:{zh:`${{"c":"圣杯","w":"权杖","s":"宝剑","p":"钱币"}[suit]}${i+1}`,
+          en:`${{"c":"Cups","w":"Wands","s":"Swords","p":"Pentacles"}[suit]} ${i+1}`,
+          jp:`${{"c":"カップ","w":"ワンド","s":"ソード","p":"ペンタクル"}[suit]}の${i+1}`},
+    meaning:{zh:{"c":"情感与关系","w":"行动与创造","s":"思想与真理","p":"物质与事业"}[suit],
+             en:{"c":"Emotion & relationship","w":"Action & creativity","s":"Mind & truth","p":"Material & work"}[suit],
+             jp:{"c":"感情と関係","w":"行動と創造","s":"思考と真実","p":"物質と仕事"}[suit]}
+  })))
+];
+
+// 今日缓存
 const todayKey=new Date().toISOString().slice(0,10);
-let saved=JSON.parse(localStorage.getItem("tarot_today"));
+let saved=JSON.parse(localStorage.getItem("tarot_today")||"null");
 if(saved&&saved.date===todayKey){
   showCard(saved.card,saved.reversed,saved.lang,true);
   btn.textContent="今日已抽牌（点击重新查看）";
 }
 
-/* --- Draw logic --- */
+// 抽牌
 btn.addEventListener("click",()=>{
   const lang=langSelect.value;
   const todayKey=new Date().toISOString().slice(0,10);
-  let stored=JSON.parse(localStorage.getItem("tarot_today"));
+  const stored=JSON.parse(localStorage.getItem("tarot_today")||"null");
   if(stored&&stored.date===todayKey){
     showCard(stored.card,stored.reversed,stored.lang,true);
     return;
@@ -200,18 +184,20 @@ btn.addEventListener("click",()=>{
   showCard(cardData,reversed,lang,false);
 });
 
-/* --- Show card --- */
+// 显示卡片 + 运势
 function showCard(cardData,reversed,lang,instant){
   const imgUrl=getImgUrl(cardData.id,cardData.suit);
   front.style.backgroundImage=`url('${imgUrl}')`;
   front.style.transform=reversed?"rotate(180deg)":"rotate(0)";
   cardName.textContent=cardData.name[lang]+(reversed?"（逆位）":"（正位）");
   meaning.textContent=(reversed?"【逆位含义】":"【正位含义】")+" "+cardData.meaning[lang];
-  const bgColor=elementsColor[(cardData.suit||"M").toUpperCase()]||"#6c5ce7";
+  const bgColor=elementsColor[cardData.suit]||"#6c5ce7";
   document.body.style.background=`radial-gradient(circle at center, ${bgColor}, #0d1321)`;
   inner.classList.add("flip");
+  genFortune(cardData,reversed,lang);
 }
-</script>
 
+});
+</script>
 </body>
 </html>

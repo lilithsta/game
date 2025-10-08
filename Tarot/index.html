@@ -38,9 +38,8 @@
     transition: all 0.3s;
     margin-top: 20px;
   }
-  #drawBtn:hover {
-    background: #a29bfe;
-  }
+  #drawBtn:hover { background: #a29bfe; }
+
   .card {
     width: 240px;
     height: 420px;
@@ -69,7 +68,8 @@
     border-radius: 10px;
   }
   .front {
-    background: url('https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_00_Fool.jpg') center/cover no-repeat;
+    background-size: cover;
+    background-position: center;
   }
   .back {
     transform: rotateY(180deg);
@@ -82,11 +82,7 @@
   }
   #cardName { font-size: 1.2em; margin-bottom: 10px; color: #ffd86b; }
   #meaning { font-size: 0.95em; line-height: 1.4em; }
-  footer {
-    color: #aaa;
-    font-size: 0.8em;
-    margin-bottom: 20px;
-  }
+  footer { color: #aaa; font-size: 0.8em; margin-bottom: 20px; }
 </style>
 </head>
 <body>
@@ -118,8 +114,6 @@ const tarotDeck = [
     meaning: { zh: "新的开始，自由与冒险。", en: "New beginnings, freedom, adventure.", jp: "新しい旅立ちと自由。" } },
   { id: 1, name: { zh: "魔术师", en: "The Magician", jp: "魔術師" },
     meaning: { zh: "展现你的能力，创造与实现。", en: "Manifestation, power, creativity.", jp: "創造と意志の力。" } },
-  { id: 2, name: { zh: "女祭司", en: "The High Priestess", jp: "女教皇" },
-    meaning: { zh: "直觉与秘密的智慧。", en: "Intuition and hidden knowledge.", jp: "直感と秘められた知恵。" } },
   { id: 3, name: { zh: "女皇", en: "The Empress", jp: "女帝" },
     meaning: { zh: "爱与丰盛，关怀与创造。", en: "Abundance, care, creativity.", jp: "豊かさと母性。" } },
   { id: 4, name: { zh: "皇帝", en: "The Emperor", jp: "皇帝" },
@@ -128,12 +122,6 @@ const tarotDeck = [
     meaning: { zh: "传统、信仰与精神引导。", en: "Tradition, belief, guidance.", jp: "伝統と信仰。" } },
   { id: 6, name: { zh: "恋人", en: "The Lovers", jp: "恋人たち" },
     meaning: { zh: "爱情与选择。", en: "Love and choices.", jp: "愛と選択。" } },
-  { id: 7, name: { zh: "战车", en: "The Chariot", jp: "戦車" },
-    meaning: { zh: "决心与胜利。", en: "Determination and victory.", jp: "決意と勝利。" } },
-  { id: 8, name: { zh: "力量", en: "Strength", jp: "力" },
-    meaning: { zh: "内在的勇气与温柔。", en: "Inner strength and compassion.", jp: "内なる強さと優しさ。" } },
-  { id: 13, name: { zh: "死神", en: "Death", jp: "死神" },
-    meaning: { zh: "结束与重生。", en: "Endings and transformation.", jp: "終わりと再生。" } },
   { id: 19, name: { zh: "太阳", en: "The Sun", jp: "太陽" },
     meaning: { zh: "成功、喜悦、幸福。", en: "Success, joy, happiness.", jp: "成功と幸福。" } },
   { id: 20, name: { zh: "审判", en: "Judgement", jp: "審判" },
@@ -150,37 +138,44 @@ const cardName = document.getElementById("cardName");
 const meaning = document.getElementById("meaning");
 const langSelect = document.getElementById("langSelect");
 
+// 使用 GitHub 安全图源 (无 CORB)
+function getImgUrl(id) {
+  return `https://raw.githubusercontent.com/andymeneely/tarot-images/main/${String(id).padStart(2,'0')}.jpg`;
+}
+
 // 检查今日是否已抽牌
 const todayKey = new Date().toISOString().slice(0,10);
 let saved = JSON.parse(localStorage.getItem("tarot_today"));
 if (saved && saved.date === todayKey) {
   showCard(saved.card, saved.reversed, saved.lang, true);
+  btn.textContent = "今日已抽牌（点击重新查看）";
 }
 
 btn.addEventListener("click", () => {
-  if (saved && saved.date === todayKey) {
-    alert("你今天已经抽过啦！(You already drew today!)");
+  const todayKey = new Date().toISOString().slice(0,10);
+  const lang = langSelect.value;
+  let stored = JSON.parse(localStorage.getItem("tarot_today"));
+  
+  // 如果今天已抽过 → 直接显示当日牌
+  if (stored && stored.date === todayKey) {
+    showCard(stored.card, stored.reversed, stored.lang, true);
     return;
   }
+
+  // 随机抽牌
   const cardData = tarotDeck[Math.floor(Math.random()*tarotDeck.length)];
-  const reversed = Math.random() < 0.5; // 正逆位
-  const lang = langSelect.value;
+  const reversed = Math.random() < 0.5;
   localStorage.setItem("tarot_today", JSON.stringify({date: todayKey, card: cardData, reversed, lang}));
   showCard(cardData, reversed, lang, false);
 });
 
 function showCard(cardData, reversed, lang, instant) {
-  const imgUrl = `https://raw.githubusercontent.com/andymeneely/tarot-images/main/${String(cardData.id).padStart(2,'0')}_${cardData.name.en.replace(" ", "_")}.jpg`;
-
+  const imgUrl = getImgUrl(cardData.id);
   front.style.backgroundImage = `url('${imgUrl}')`;
   front.style.transform = reversed ? "rotate(180deg)" : "rotate(0)";
   cardName.textContent = cardData.name[lang] + (reversed ? "（逆位）" : "（正位）");
   meaning.textContent = (reversed ? "【逆位含义】" : "【正位含义】") + " " + cardData.meaning[lang];
-  if (!instant) {
-    inner.classList.add("flip");
-  } else {
-    inner.classList.add("flip");
-  }
+  inner.classList.add("flip");
 }
 </script>
 </body>

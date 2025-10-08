@@ -14,7 +14,7 @@
       <button id="btn-save">Save</button>
       <button id="btn-load">Load</button>
       <select id="lang-select">
-        <option value="en">English</option>
+        <option value="en" selected>English</option>
         <option value="zh">中文</option>
         <option value="jp">日本語</option>
       </select>
@@ -46,8 +46,9 @@
 
   <script>
     window.GAME_CONFIG = {
-      storyUrl: "data/story.json",
-      autosaveKey: "isekai_save_v2",
+      storyUrl: "data/story_base.json",
+      langBase: "data/lang_",
+      autosaveKey: "isekai_save_v3",
       lang: "en"
     };
   </script>

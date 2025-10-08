@@ -57,9 +57,7 @@
     transform-style: preserve-3d;
     position: relative;
   }
-  .flip .inner {
-    transform: rotateY(180deg);
-  }
+  .flip .inner { transform: rotateY(180deg); }
   .front, .back {
     position: absolute;
     width: 100%;
@@ -87,7 +85,7 @@
 </head>
 <body>
 
-<h1 id="title">🔮 今日塔罗占卜 Tarot of the Day / 今日のタロット占い</h1>
+<h1>🔮 今日塔罗占卜 Tarot of the Day / 今日のタロット占い</h1>
 <select id="langSelect">
   <option value="zh">中文</option>
   <option value="en">English</option>
@@ -109,27 +107,29 @@
 <footer>© 2025 今日塔罗 · Tarot of the Day</footer>
 
 <script>
+/* --- 卡牌数据（部分示例，可扩展） --- */
 const tarotDeck = [
-  { id: 0, name: { zh: "愚者", en: "The Fool", jp: "愚者" },
-    meaning: { zh: "新的开始，自由与冒险。", en: "New beginnings, freedom, adventure.", jp: "新しい旅立ちと自由。" } },
-  { id: 1, name: { zh: "魔术师", en: "The Magician", jp: "魔術師" },
-    meaning: { zh: "展现你的能力，创造与实现。", en: "Manifestation, power, creativity.", jp: "創造と意志の力。" } },
-  { id: 3, name: { zh: "女皇", en: "The Empress", jp: "女帝" },
-    meaning: { zh: "爱与丰盛，关怀与创造。", en: "Abundance, care, creativity.", jp: "豊かさと母性。" } },
-  { id: 4, name: { zh: "皇帝", en: "The Emperor", jp: "皇帝" },
-    meaning: { zh: "权威与秩序，掌控局势。", en: "Authority, control, stability.", jp: "支配と秩序。" } },
-  { id: 5, name: { zh: "教皇", en: "The Hierophant", jp: "法王" },
-    meaning: { zh: "传统、信仰与精神引导。", en: "Tradition, belief, guidance.", jp: "伝統と信仰。" } },
-  { id: 6, name: { zh: "恋人", en: "The Lovers", jp: "恋人たち" },
-    meaning: { zh: "爱情与选择。", en: "Love and choices.", jp: "愛と選択。" } },
-  { id: 19, name: { zh: "太阳", en: "The Sun", jp: "太陽" },
-    meaning: { zh: "成功、喜悦、幸福。", en: "Success, joy, happiness.", jp: "成功と幸福。" } },
-  { id: 20, name: { zh: "审判", en: "Judgement", jp: "審判" },
-    meaning: { zh: "觉醒与救赎。", en: "Awakening, redemption.", jp: "目覚めと救い。" } },
-  { id: 21, name: { zh: "世界", en: "The World", jp: "世界" },
-    meaning: { zh: "圆满、完成与成就。", en: "Fulfillment, completion, harmony.", jp: "完成と調和。" } }
+  // 大阿尔卡那
+  { id: 0, suit: "m", name: { zh: "愚者", en: "The Fool", jp: "愚者" }, meaning: { zh: "新的开始，自由与冒险。", en: "New beginnings, freedom, adventure.", jp: "新しい旅立ちと自由。" } },
+  { id: 1, suit: "m", name: { zh: "魔术师", en: "The Magician", jp: "魔術師" }, meaning: { zh: "展现你的能力，创造与实现。", en: "Manifestation, power, creativity.", jp: "創造と意志の力。" } },
+  { id: 19, suit: "m", name: { zh: "太阳", en: "The Sun", jp: "太陽" }, meaning: { zh: "成功、喜悦、幸福。", en: "Success, joy, happiness.", jp: "成功と幸福。" } },
+  { id: 21, suit: "m", name: { zh: "世界", en: "The World", jp: "世界" }, meaning: { zh: "圆满、完成与成就。", en: "Fulfillment, completion, harmony.", jp: "完成と調和。" } },
+
+  // 圣杯（C）
+  { id: 1, suit: "C", name: { zh: "圣杯一", en: "Ace of Cups", jp: "カップのエース" }, meaning: { zh: "情感的新开始。", en: "New emotional beginnings.", jp: "新しい感情の始まり。" } },
+  { id: 10, suit: "C", name: { zh: "圣杯十", en: "Ten of Cups", jp: "カップの10" }, meaning: { zh: "家庭幸福与和谐。", en: "Harmony and joy in relationships.", jp: "家庭の調和と幸福。" } },
+
+  // 权杖（W）
+  { id: 1, suit: "w", name: { zh: "权杖一", en: "Ace of Wands", jp: "ワンドのエース" }, meaning: { zh: "灵感的火花。", en: "The spark of inspiration.", jp: "ひらめきの火花。" } },
+
+  // 宝剑（S）
+  { id: 1, suit: "s", name: { zh: "宝剑一", en: "Ace of Swords", jp: "ソードのエース" }, meaning: { zh: "新的想法与真理。", en: "New ideas and clarity.", jp: "新しい考えと真実。" } },
+
+  // 钱币（P）
+  { id: 1, suit: "p", name: { zh: "钱币一", en: "Ace of Pentacles", jp: "ペンタクルのエース" }, meaning: { zh: "新的物质机遇。", en: "New material opportunities.", jp: "新しい物質的チャンス。" } }
 ];
 
+/* --- 元素引用 --- */
 const btn = document.getElementById("drawBtn");
 const card = document.getElementById("tarotCard");
 const inner = card.querySelector(".inner");
@@ -138,12 +138,14 @@ const cardName = document.getElementById("cardName");
 const meaning = document.getElementById("meaning");
 const langSelect = document.getElementById("langSelect");
 
-// 使用 GitHub 安全图源 (无 CORB)
-function getImgUrl(id) {
-  return `https://raw.githubusercontent.com/andymeneely/tarot-images/main/${String(id).padStart(2,'0')}.jpg`;
+/* --- 根据花色和编号构建图像路径 --- */
+function getImgUrl(id, suit) {
+  const prefix = suit.toUpperCase();
+  const num = String(id).padStart(2, '0');
+  return `https://raw.githubusercontent.com/lambiengcode/flutter-tarot-card/master/images/${prefix}${num}.png`;
 }
 
-// 检查今日是否已抽牌
+/* --- 加载保存的今日抽牌 --- */
 const todayKey = new Date().toISOString().slice(0,10);
 let saved = JSON.parse(localStorage.getItem("tarot_today"));
 if (saved && saved.date === todayKey) {
@@ -151,26 +153,24 @@ if (saved && saved.date === todayKey) {
   btn.textContent = "今日已抽牌（点击重新查看）";
 }
 
+/* --- 抽卡逻辑 --- */
 btn.addEventListener("click", () => {
-  const todayKey = new Date().toISOString().slice(0,10);
   const lang = langSelect.value;
+  const todayKey = new Date().toISOString().slice(0,10);
   let stored = JSON.parse(localStorage.getItem("tarot_today"));
-  
-  // 如果今天已抽过 → 直接显示当日牌
   if (stored && stored.date === todayKey) {
     showCard(stored.card, stored.reversed, stored.lang, true);
     return;
   }
-
-  // 随机抽牌
-  const cardData = tarotDeck[Math.floor(Math.random()*tarotDeck.length)];
+  const cardData = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
   const reversed = Math.random() < 0.5;
-  localStorage.setItem("tarot_today", JSON.stringify({date: todayKey, card: cardData, reversed, lang}));
+  localStorage.setItem("tarot_today", JSON.stringify({ date: todayKey, card: cardData, reversed, lang }));
   showCard(cardData, reversed, lang, false);
 });
 
+/* --- 显示卡牌 --- */
 function showCard(cardData, reversed, lang, instant) {
-  const imgUrl = getImgUrl(cardData.id);
+  const imgUrl = getImgUrl(cardData.id, cardData.suit);
   front.style.backgroundImage = `url('${imgUrl}')`;
   front.style.transform = reversed ? "rotate(180deg)" : "rotate(0)";
   cardName.textContent = cardData.name[lang] + (reversed ? "（逆位）" : "（正位）");
@@ -178,5 +178,6 @@ function showCard(cardData, reversed, lang, instant) {
   inner.classList.add("flip");
 }
 </script>
+
 </body>
 </html>

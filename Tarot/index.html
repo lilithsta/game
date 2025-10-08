@@ -170,7 +170,8 @@ btn.addEventListener("click", () => {
 });
 
 function showCard(cardData, reversed, lang, instant) {
-  const imgUrl = `https://upload.wikimedia.org/wikipedia/commons/${String(cardData.id).padStart(2,'0')}/RWS_Tarot_${String(cardData.id).padStart(2,'0')}_${cardData.name.en.replace(" ", "_")}.jpg`;
+  const imgUrl = const imgUrl = `https://raw.githubusercontent.com/andymeneely/tarot-images/main/${String(cardData.id).padStart(2,'0')}_${cardData.name.en.replace(" ", "_")}.jpg`;
+
   front.style.backgroundImage = `url('${imgUrl}')`;
   front.style.transform = reversed ? "rotate(180deg)" : "rotate(0)";
   cardName.textContent = cardData.name[lang] + (reversed ? "（逆位）" : "（正位）");

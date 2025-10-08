@@ -66,10 +66,7 @@ h1 {
   backface-visibility: hidden;
   border-radius: 10px;
 }
-.front {
-  background-size: cover;
-  background-position: center;
-}
+.front { background-size: cover; background-position: center; }
 .back {
   transform: rotateY(180deg);
   background: rgba(30,30,60,0.9);
@@ -153,15 +150,11 @@ let tarotDeck=[];
 await fetch("tarotDeck.json").then(r=>r.json()).then(d=>tarotDeck=d)
 .catch(()=>alert("❌ 无法加载 tarotDeck.json"));
 
-// 图片路径
+// 安全图片路径
 function getImgUrl(id, suit){
-  if(!suit){
-    console.warn("⚠️ suit is undefined for card id:", id);
-    return "images/default.jpg"; // 放一张占位图
-  }
+  if(!suit){ console.warn("⚠️ suit undefined:",id); return "images/default.jpg"; }
   return `images/${String(suit).toLowerCase()}${String(id).padStart(2,"0")}.jpg`;
 }
-
 
 // 多语言字典
 const i18n={
@@ -185,11 +178,11 @@ const i18n={
       health:["生活リズムを整えて。","ストレスに注意。","活力にあふれる日。","食事のバランスを取ろう。"]}
 };
 
-// 星级随机
+// 随机星级
 function randomStars(){return "★".repeat(Math.floor(Math.random()*3+3));}
 
-// 生成运势
-function genFortune(card,reversed,lang){
+// 生成运势，可返回HTML
+function genFortune(card,reversed,lang,returnHTMLOnly=false){
   const t=i18n[lang]||i18n.zh;
   fortuneTitle.textContent=t.title;
   const pick=a=>a[Math.floor(Math.random()*a.length)];
@@ -198,14 +191,16 @@ function genFortune(card,reversed,lang){
     `${t.categories[1]}：${pick(t.career)} <span class='stars'>${randomStars()}</span>`,
     `${t.categories[2]}：${pick(t.health)} <span class='stars'>${randomStars()}</span>`
   ].map(s=>`<div class='fortune-item'>${s}</div>`).join("");
-  fortuneText.innerHTML=sections+
-  `<hr style='opacity:0.3'>
-  📖 <b>${card.name[lang]}</b>：${card.meaning[lang]}<br>
-  🔄 ${reversed?t.reversed:t.upright}`;
+  const html=sections+
+    `<hr style='opacity:0.3'>
+    📖 <b>${card.name[lang]}</b>：${card.meaning[lang]}<br>
+    🔄 ${reversed?t.reversed:t.upright}`;
+  if(returnHTMLOnly) return html;
+  fortuneText.innerHTML=html;
   fortuneBox.style.display="block";
 }
 
-// 缓存
+// 今日缓存检查
 const todayKey=new Date().toISOString().slice(0,10);
 let saved=JSON.parse(localStorage.getItem("tarot_today")||"null");
 if(saved&&saved.date===todayKey){
@@ -220,12 +215,13 @@ btn.addEventListener("click",()=>{
   if(stored&&stored.date===todayKey){showCard(stored.card,stored.reversed,stored.lang,true);return;}
   const card=tarotDeck[Math.floor(Math.random()*tarotDeck.length)];
   const reversed=Math.random()<0.5;
-  localStorage.setItem("tarot_today",JSON.stringify({date:todayKey,card,reversed,lang}));
+  const fortuneHTML=genFortune(card,reversed,lang,true);
+  localStorage.setItem("tarot_today",JSON.stringify({date:todayKey,card,reversed,lang,fortuneHTML}));
   showCard(card,reversed,lang,false);
 });
 
 // 显示卡片
-function showCard(card,reversed,lang){
+function showCard(card,reversed,lang,isCached){
   const img=getImgUrl(card.id,card.suit);
   front.style.backgroundImage=`url('${img}')`;
   front.style.transform=reversed?"rotate(180deg)":"rotate(0)";
@@ -233,6 +229,16 @@ function showCard(card,reversed,lang){
   meaning.textContent=(reversed?"【逆位含义】":"【正位含义】")+" "+card.meaning[lang];
   document.body.style.background=`radial-gradient(circle at center, ${elementsColor[card.suit]||"#6c5ce7"}, #0d1321)`;
   inner.classList.add("flip");
+
+  if(isCached){
+    const stored=JSON.parse(localStorage.getItem("tarot_today"));
+    if(stored&&stored.fortuneHTML){
+      fortuneText.innerHTML=stored.fortuneHTML;
+      fortuneTitle.textContent=i18n[stored.lang]?.title||i18n.zh.title;
+      fortuneBox.style.display="block";
+      return;
+    }
+  }
   genFortune(card,reversed,lang);
 }
 });
